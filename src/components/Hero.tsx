@@ -38,7 +38,7 @@ export function Hero() {
                     className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-light tracking-tighter text-white mb-6"
                 >
                     Capital for the <br />
-                    <span className="font-script text-5xl sm:text-6xl md:text-8xl lg:text-9xl text-[var(--color-gold)] ml-2 block sm:inline mt-2 sm:mt-0">1% of Traders</span>
+                    <span className="font-script text-5xl sm:text-6xl md:text-8xl lg:text-9xl text-gold-shine ml-2 block sm:inline mt-2 sm:mt-0">1% of Traders</span>
                 </motion.h1>
 
                 <motion.p
