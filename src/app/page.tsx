@@ -4,6 +4,7 @@ import { Offer } from "@/components/Offer";
 import { Footer } from "@/components/Footer";
 import { Background } from "@/components/Background";
 import { Countdown } from "@/components/Countdown";
+import { ProgramDetails } from "@/components/ProgramDetails";
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
       <Countdown />
       <WhitelistRationale />
       <Offer />
+      <ProgramDetails />
       <Footer />
     </main>
   );
