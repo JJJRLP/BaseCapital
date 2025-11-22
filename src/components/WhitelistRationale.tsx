@@ -23,17 +23,17 @@ const features = [
 
 export function WhitelistRationale() {
     return (
-        <section className="py-32 px-6 bg-[#050505] relative overflow-hidden">
+        <section className="py-20 md:py-32 px-6 bg-[#050505] relative overflow-hidden">
             <div className="container mx-auto max-w-6xl">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.8 }}
-                    className="mb-20 text-center"
+                    className="mb-12 md:mb-20 text-center"
                 >
                     <h2 className="text-3xl md:text-5xl font-light text-white mb-6">
-                        The <span className="font-script text-5xl md:text-6xl text-[var(--color-gold)] mx-2">Whitelist</span> Rationale
+                        The <span className="font-script text-5xl md:text-6xl text-[var(--color-gold)] mx-2 block md:inline mt-2 md:mt-0">Whitelist</span> Rationale
                     </h2>
                     <p className="text-zinc-400 max-w-2xl mx-auto text-lg font-light">
                         Trading is a profession, not a gamble. We provide the infrastructure, capital, and global reach for you to succeed.

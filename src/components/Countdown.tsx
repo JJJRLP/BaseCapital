@@ -39,18 +39,18 @@ export function Countdown() {
     }, []);
 
     return (
-        <section className="py-20 px-6 border-y border-zinc-900/50 bg-zinc-900/10 backdrop-blur-sm">
+        <section className="py-12 md:py-20 px-6 border-y border-zinc-900/50 bg-zinc-900/10 backdrop-blur-sm">
             <div className="container mx-auto max-w-4xl text-center">
                 <motion.h3
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="text-sm tracking-[0.3em] uppercase text-zinc-500 mb-12"
+                    className="text-xs md:text-sm tracking-[0.3em] uppercase text-zinc-500 mb-8 md:mb-12"
                 >
                     Next Cohort Opens In
                 </motion.h3>
 
-                <div className="flex flex-wrap justify-center gap-8 md:gap-16">
+                <div className="flex flex-wrap justify-center gap-4 sm:gap-8 md:gap-16">
                     <TimeUnit value={timeLeft.days} label="Days" />
                     <TimeUnit value={timeLeft.hours} label="Hours" />
                     <TimeUnit value={timeLeft.minutes} label="Minutes" />
@@ -63,16 +63,16 @@ export function Countdown() {
 
 function TimeUnit({ value, label }: { value: number; label: string }) {
     return (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center min-w-[60px] sm:min-w-[80px]">
             <motion.div
                 key={value}
                 initial={{ y: 10, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                className="text-5xl md:text-7xl font-light text-white tabular-nums font-script" // Using script font for numbers as a stylistic choice, or keep sans for readability. User asked for elite. Let's try sans for readability but maybe gold?
+                className="text-4xl sm:text-5xl md:text-7xl font-light text-white tabular-nums font-script" // Using script font for numbers as a stylistic choice, or keep sans for readability. User asked for elite. Let's try sans for readability but maybe gold?
             >
                 <span className="font-sans text-white">{value.toString().padStart(2, "0")}</span>
             </motion.div>
-            <span className="text-xs uppercase tracking-widest text-zinc-600 mt-4">{label}</span>
+            <span className="text-[10px] md:text-xs uppercase tracking-widest text-zinc-600 mt-2 md:mt-4">{label}</span>
         </div>
     );
 }

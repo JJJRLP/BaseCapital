@@ -10,7 +10,7 @@ export function Hero() {
     const opacity = useTransform(scrollY, [0, 300], [1, 0]);
 
     return (
-        <section className="relative h-screen w-full overflow-hidden flex items-center justify-center">
+        <section className="relative min-h-[100dvh] w-full overflow-hidden flex items-center justify-center py-20 md:py-0">
             {/* Background Elements */}
             <div className="absolute inset-0 z-0">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-zinc-900/20 via-[#050505] to-[#050505]" />
@@ -26,7 +26,7 @@ export function Hero() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
                 >
-                    <span className="inline-block py-1 px-3 border border-zinc-800 rounded-full text-xs tracking-[0.2em] text-zinc-500 uppercase mb-6 backdrop-blur-sm">
+                    <span className="inline-block py-1 px-3 border border-zinc-800 rounded-full text-[10px] md:text-xs tracking-[0.2em] text-zinc-500 uppercase mb-6 backdrop-blur-sm">
                         Institutional Grade
                     </span>
                 </motion.div>
@@ -35,17 +35,17 @@ export function Hero() {
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-                    className="text-5xl md:text-7xl lg:text-8xl font-light tracking-tighter text-white mb-6"
+                    className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-light tracking-tighter text-white mb-6"
                 >
                     Capital for the <br />
-                    <span className="font-script text-6xl md:text-8xl lg:text-9xl text-[var(--color-gold)] ml-2">1% of Traders</span>
+                    <span className="font-script text-5xl sm:text-6xl md:text-8xl lg:text-9xl text-[var(--color-gold)] ml-2 block sm:inline mt-2 sm:mt-0">1% of Traders</span>
                 </motion.h1>
 
                 <motion.p
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-                    className="text-lg md:text-xl text-zinc-400 max-w-xl mx-auto mb-10 font-light leading-relaxed"
+                    className="text-base md:text-xl text-zinc-400 max-w-xl mx-auto mb-10 font-light leading-relaxed px-4 md:px-0"
                 >
                     Prove your edge with raw spreads, zero slippage, and deep institutional liquidity.
                 </motion.p>
