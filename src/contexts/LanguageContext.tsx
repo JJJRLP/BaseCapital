@@ -31,6 +31,22 @@ interface Translations {
             description: string;
         }[];
     };
+    whitelist: {
+        title_prefix: string;
+        title_suffix: string;
+        description: string;
+        items: {
+            title: string;
+            description: string;
+        }[];
+    };
+    footer: {
+        rights: string;
+        privacy: string;
+        terms: string;
+        risk: string;
+        developed_by: string;
+    };
 }
 
 const translations: Record<Language, Translations> = {
@@ -81,6 +97,36 @@ const translations: Record<Language, Translations> = {
                 },
             ],
         },
+        whitelist: {
+            title_prefix: "The",
+            title_suffix: "Whitelist",
+            description:
+                "Trading is a profession, not a gamble. We provide the infrastructure, capital, and global reach for you to succeed. Access is gated to ensure we partner with serious professionals.",
+            items: [
+                {
+                    title: "Professional Career Path",
+                    description:
+                        "We don't just fund traders; we build careers. Prove your consistency and scale your capital allocation up to $2M.",
+                },
+                {
+                    title: "Global Settlements",
+                    description:
+                        "Bypass banking friction. Receive payouts in USDC anywhere in the world, instantly and securely on Base.",
+                },
+                {
+                    title: "Frictionless Capital",
+                    description:
+                        "No wire delays. No geographic restrictions. Pure meritocracy powered by blockchain infrastructure.",
+                },
+            ],
+        },
+        footer: {
+            rights: "BaseCapital",
+            privacy: "Privacy Policy",
+            terms: "Terms of Service",
+            risk: "Risk Disclosure",
+            developed_by: "Developed and designed by",
+        },
     },
     es: {
         hero: {
@@ -128,6 +174,36 @@ const translations: Record<Language, Translations> = {
                         "Piscinas de liquidez profunda en Base. Ejecuta grandes órdenes con un deslizamiento mínimo.",
                 },
             ],
+        },
+        whitelist: {
+            title_prefix: "La Razón de la",
+            title_suffix: "Lista Blanca",
+            description:
+                "El trading es una profesión, no un juego de azar. Proporcionamos la infraestructura, el capital y el alcance global para que tengas éxito. El acceso está restringido para asegurar que nos asociamos con profesionales serios.",
+            items: [
+                {
+                    title: "Trayectoria Profesional",
+                    description:
+                        "No solo financiamos traders; construimos carreras. Demuestra tu consistencia y escala tu asignación de capital hasta $2M.",
+                },
+                {
+                    title: "Liquidaciones Globales",
+                    description:
+                        "Evita la fricción bancaria. Recibe pagos en USDC en cualquier lugar del mundo, al instante y de forma segura en Base.",
+                },
+                {
+                    title: "Capital Sin Fricción",
+                    description:
+                        "Sin retrasos en transferencias. Sin restricciones geográficas. Pura meritocracia impulsada por infraestructura blockchain.",
+                },
+            ],
+        },
+        footer: {
+            rights: "BaseCapital",
+            privacy: "Política de Privacidad",
+            terms: "Términos de Servicio",
+            risk: "Divulgación de Riesgos",
+            developed_by: "Desarrollado y diseñado por",
         },
     },
 };
