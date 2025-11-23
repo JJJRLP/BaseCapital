@@ -38,7 +38,7 @@ export function WhitelistRationale() {
                                 transition={{ duration: 0.6, delay: index * 0.2 }}
                                 className="group p-8 border border-zinc-900 bg-zinc-900/20 hover:bg-zinc-900/40 transition-colors duration-500"
                             >
-                                <Icon className="w-8 h-8 text-zinc-500 mb-6 group-hover:text-white transition-colors duration-500" />
+                                <Icon className="w-8 h-8 text-[var(--color-gold)] mb-6 drop-shadow-[0_0_10px_rgba(212,175,55,0.5)] group-hover:text-[#F3E5AB] group-hover:drop-shadow-[0_0_20px_rgba(243,229,171,0.6)] transition-all duration-500" />
                                 <h3 className="text-xl text-white font-medium mb-4 tracking-wide uppercase text-sm">
                                     {feature.title}
                                 </h3>
