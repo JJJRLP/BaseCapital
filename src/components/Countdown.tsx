@@ -2,8 +2,10 @@
 
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export function Countdown() {
+    const { t } = useLanguage();
     // Set target date to 1 month and 2 weeks from now (approx 45 days)
     // For demo purposes, we'll set a fixed future date or calculate it dynamically once
     const [timeLeft, setTimeLeft] = useState({
@@ -47,14 +49,14 @@ export function Countdown() {
                     viewport={{ once: true }}
                     className="text-xs md:text-sm tracking-[0.3em] uppercase text-zinc-500 mb-8 md:mb-12"
                 >
-                    Next Cohort Opens In
+                    {t.countdown.title}
                 </motion.h3>
 
                 <div className="flex flex-wrap justify-center gap-4 sm:gap-8 md:gap-16">
-                    <TimeUnit value={timeLeft.days} label="Days" />
-                    <TimeUnit value={timeLeft.hours} label="Hours" />
-                    <TimeUnit value={timeLeft.minutes} label="Minutes" />
-                    <TimeUnit value={timeLeft.seconds} label="Seconds" />
+                    <TimeUnit value={timeLeft.days} label={t.countdown.days} />
+                    <TimeUnit value={timeLeft.hours} label={t.countdown.hours} />
+                    <TimeUnit value={timeLeft.minutes} label={t.countdown.minutes} />
+                    <TimeUnit value={timeLeft.seconds} label={t.countdown.seconds} />
                 </div>
             </div>
         </section>

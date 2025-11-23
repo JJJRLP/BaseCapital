@@ -3,14 +3,18 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { ArrowRight } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 export function Hero() {
+    const { t } = useLanguage();
     const { scrollY } = useScroll();
     const y1 = useTransform(scrollY, [0, 500], [0, 200]);
     const opacity = useTransform(scrollY, [0, 300], [1, 0]);
 
     return (
         <section className="relative min-h-[100dvh] w-full overflow-hidden flex items-center justify-center py-20 md:py-0">
+            <LanguageSwitcher className="absolute top-6 right-6 md:top-10 md:right-10" />
             {/* Background Elements */}
             <div className="absolute inset-0 z-0">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-zinc-900/20 via-[#050505] to-[#050505]" />
@@ -27,7 +31,7 @@ export function Hero() {
                     transition={{ duration: 0.8, ease: "easeOut" }}
                 >
                     <span className="inline-block py-1 px-3 border border-zinc-800 rounded-full text-[10px] md:text-xs tracking-[0.2em] text-zinc-500 uppercase mb-6 backdrop-blur-sm">
-                        Institutional Grade
+                        {t.hero.tag}
                     </span>
                 </motion.div>
 
@@ -37,8 +41,8 @@ export function Hero() {
                     transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
                     className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-light tracking-tighter text-white mb-6"
                 >
-                    Capital for the <br />
-                    <span className="font-script text-5xl sm:text-6xl md:text-8xl lg:text-9xl text-gold-shine ml-2 block sm:inline mt-2 sm:mt-0">1% of Traders</span>
+                    {t.hero.title_prefix} <br />
+                    <span className="font-script text-5xl sm:text-6xl md:text-8xl lg:text-9xl text-gold-shine ml-2 block sm:inline mt-2 sm:mt-0">{t.hero.title_suffix}</span>
                 </motion.h1>
 
                 <motion.p
@@ -47,7 +51,7 @@ export function Hero() {
                     transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
                     className="text-base md:text-xl text-zinc-400 max-w-xl mx-auto mb-10 font-light leading-relaxed px-4 md:px-0"
                 >
-                    Prove your edge with raw spreads, zero slippage, and deep institutional liquidity.
+                    {t.hero.description}
                 </motion.p>
 
                 <motion.div
@@ -57,11 +61,11 @@ export function Hero() {
                     className="flex flex-col sm:flex-row gap-4"
                 >
                     <Button size="lg" className="group">
-                        Request Access
+                        {t.hero.cta_primary}
                         <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </Button>
                     <Button variant="outline" size="lg">
-                        View Parameters
+                        {t.hero.cta_secondary}
                     </Button>
                 </motion.div>
             </motion.div>
@@ -73,7 +77,7 @@ export function Hero() {
                 transition={{ delay: 1.5, duration: 1 }}
                 className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
             >
-                <span className="text-[10px] uppercase tracking-[0.2em] text-zinc-600">Scroll</span>
+                <span className="text-[10px] uppercase tracking-[0.2em] text-zinc-600">{t.hero.scroll}</span>
                 <div className="w-[1px] h-12 bg-gradient-to-b from-zinc-600 to-transparent" />
             </motion.div>
         </section>

@@ -2,31 +2,12 @@
 
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-const offers = [
-    {
-        title: "Evaluation Model",
-        description: "A simple, subscription-based assessment to prove your skills. Pass the benchmark, get funded. No hidden rules.",
-        highlight: true,
-    },
-    {
-        title: "Instant USDC Payouts",
-        description: "Withdraw your profit share instantly. No waiting for bank wires or processing days.",
-        highlight: false,
-    },
-    {
-        title: "Raw Spreads",
-        description: "Direct market access pricing. Trade the real market conditions you're used to.",
-        highlight: false,
-    },
-    {
-        title: "Institutional Liquidity",
-        description: "Deep liquidity pools on Base. Execute large orders with minimal slippage.",
-        highlight: false,
-    },
-];
+
 
 export function Offer() {
+    const { t } = useLanguage();
     return (
         <section className="py-20 md:py-32 px-6 bg-[#0a0a0a] relative">
             <div className="container mx-auto max-w-6xl">
@@ -39,26 +20,25 @@ export function Offer() {
                         className="w-full md:w-1/3 md:sticky md:top-32"
                     >
                         <h2 className="text-4xl md:text-6xl font-light text-white mb-8">
-                            The <span className="font-script text-6xl md:text-7xl text-[var(--color-gold)] block mt-2">Offer</span>
+                            {t.offer.title_prefix} <span className="font-script text-6xl md:text-7xl text-[var(--color-gold)] block mt-2">{t.offer.title_suffix}</span>
                         </h2>
                         <p className="text-zinc-400 text-lg font-light mb-10 leading-relaxed">
-                            We provide the capital. You provide the edge.
-                            Our infrastructure is built for professionals who demand precision.
+                            {t.offer.description}
                         </p>
                         <Button size="lg" className="w-full md:w-auto">
-                            Apply for Evaluation
+                            {t.offer.cta}
                         </Button>
                     </motion.div>
 
                     <div className="md:w-2/3 w-full grid gap-6">
-                        {offers.map((offer, index) => (
+                        {t.offer.items.map((offer, index) => (
                             <motion.div
                                 key={index}
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                                className={`p-8 border ${offer.highlight
+                                className={`p-8 border ${index === 0
                                     ? "border-zinc-700 bg-zinc-900/40"
                                     : "border-zinc-900 bg-transparent hover:border-zinc-800"
                                     } transition-all duration-300`}
