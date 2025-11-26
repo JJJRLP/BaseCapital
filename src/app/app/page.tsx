@@ -3,11 +3,14 @@
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { StatsOverview } from "@/components/dashboard/StatsOverview";
 import { TradersRanking } from "@/components/dashboard/TradersRanking";
+import { AccountSetup } from "@/components/dashboard/AccountSetup";
+import { StageSuccessModal } from "@/components/dashboard/StageSuccessModal";
 import { motion } from "framer-motion";
 
 export default function AppPage() {
     return (
         <DashboardLayout>
+            <StageSuccessModal />
             <div className="max-w-7xl mx-auto">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -22,6 +25,8 @@ export default function AppPage() {
                         Welcome back, Trader. Here is your daily overview.
                     </p>
                 </motion.div>
+
+                <AccountSetup />
 
                 <StatsOverview />
 

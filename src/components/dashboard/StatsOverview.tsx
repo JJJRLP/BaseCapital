@@ -1,40 +1,61 @@
-"use client";
-
 import { motion } from "framer-motion";
-import { TrendingUp, TrendingDown, DollarSign, Activity } from "lucide-react";
-
-const stats = [
-    {
-        label: "Account Balance",
-        value: "$102,450.00",
-        change: "+2.45%",
-        isPositive: true,
-        icon: DollarSign,
-    },
-    {
-        label: "Equity",
-        value: "$104,120.50",
-        change: "+4.12%",
-        isPositive: true,
-        icon: Activity,
-    },
-    {
-        label: "Daily Drawdown",
-        value: "-$1,200.00",
-        change: "1.2%",
-        isPositive: false, // In this context, negative is "bad" but for drawdown it's usage. Let's keep it simple.
-        icon: TrendingDown,
-    },
-    {
-        label: "Profit Target",
-        value: "$8,000.00",
-        change: "30.6% Reached",
-        isPositive: true,
-        icon: TrendingUp,
-    },
-];
+import { TrendingUp, TrendingDown, DollarSign, Activity, AlertTriangle } from "lucide-react";
+import { useEvaluation } from "@/contexts/EvaluationContext";
+import { CONSTANTS, calculateDailyDrawdown } from "@/lib/prop-firm-logic";
+import { StageTransition } from "./StageTransition";
 
 export function StatsOverview() {
+    const { account, isLoading } = useEvaluation();
+
+    if (isLoading) return null;
+
+    if (!account) {
+        return (
+            <div className="mb-8 p-6 bg-zinc-900/30 border border-zinc-800 rounded-sm text-center">
+                <p className="text-zinc-400">No active evaluation account found.</p>
+            </div>
+        );
+    }
+
+    if (account.status === 'passed') {
+        return <StageTransition />;
+    }
+
+    const dailyDrawdown = calculateDailyDrawdown(account);
+    const profitTarget = account.initialBalance * (CONSTANTS[account.stage.toUpperCase() as keyof typeof CONSTANTS]?.PROFIT_TARGET || 0);
+    const profitProgress = profitTarget > 0 ? ((account.currentBalance - account.initialBalance) / profitTarget) * 100 : 0;
+
+    const stats = [
+        {
+            label: "Account Balance",
+            value: `$${account.currentBalance.toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
+            change: `${((account.currentBalance - account.initialBalance) / account.initialBalance * 100).toFixed(2)}%`,
+            isPositive: account.currentBalance >= account.initialBalance,
+            icon: DollarSign,
+        },
+        {
+            label: "Equity",
+            value: `$${account.equity.toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
+            change: "Real-time",
+            isPositive: true,
+            icon: Activity,
+        },
+        {
+            label: "Daily Drawdown",
+            value: `-$${Math.abs(dailyDrawdown).toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
+            change: `${(Math.abs(dailyDrawdown) / account.dailyStartingEquity * 100).toFixed(2)}%`,
+            isPositive: false,
+            icon: TrendingDown,
+        },
+        {
+            label: "Profit Target",
+            value: `$${profitTarget.toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
+            change: `${profitProgress.toFixed(1)}% Reached`,
+            isPositive: profitProgress >= 0,
+            icon: TrendingUp,
+        },
+    ];
+
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             {stats.map((stat, index) => (

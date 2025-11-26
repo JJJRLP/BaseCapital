@@ -3,11 +3,18 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { motion } from "framer-motion";
+import { useEvaluation } from "@/contexts/EvaluationContext";
 
 export function OrderForm() {
+    const { placeTrade, account } = useEvaluation();
     const [orderType, setOrderType] = useState<"market" | "limit">("market");
-    const [side, setSide] = useState<"buy" | "sell">("buy");
+    const [lots, setLots] = useState<string>("1");
+    const [price, setPrice] = useState<string>("64000"); // Simulated price
+
+    const handleTrade = (side: "buy" | "sell") => {
+        if (!account) return;
+        placeTrade("BTCUSD", side, parseFloat(lots), parseFloat(price));
+    };
 
     return (
         <div className="bg-zinc-900/30 border border-zinc-800 p-6 h-full flex flex-col">
@@ -37,19 +44,31 @@ export function OrderForm() {
 
             {/* Form Inputs */}
             <div className="space-y-4 flex-1">
-                <Input label="Size (USD)" placeholder="0.00" type="number" />
-                {orderType === "limit" && (
-                    <Input label="Price (USD)" placeholder="0.00" type="number" />
-                )}
+                <Input
+                    label="Lots"
+                    placeholder="1.00"
+                    type="number"
+                    value={lots}
+                    onChange={(e) => setLots(e.target.value)}
+                />
+                <Input
+                    label="Price (USD)"
+                    placeholder="64000.00"
+                    type="number"
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
+                />
 
                 <div className="pt-4">
                     <div className="flex justify-between text-xs text-zinc-500 mb-2">
                         <span>Available Balance</span>
-                        <span className="text-white">$50,000.00</span>
+                        <span className="text-white">
+                            {account ? `$${account.currentBalance.toLocaleString()}` : '-'}
+                        </span>
                     </div>
                     <div className="flex justify-between text-xs text-zinc-500 mb-2">
                         <span>Leverage</span>
-                        <span className="text-[var(--color-gold)]">20x</span>
+                        <span className="text-[var(--color-gold)]">100x</span>
                     </div>
                 </div>
             </div>
@@ -57,14 +76,16 @@ export function OrderForm() {
             {/* Buy/Sell Buttons */}
             <div className="grid grid-cols-2 gap-4 mt-6">
                 <Button
-                    onClick={() => setSide("buy")}
-                    className={`w-full ${side === "buy" ? "bg-emerald-500/10 border-emerald-500 text-emerald-500 hover:bg-emerald-500 hover:text-black" : "opacity-50 grayscale"}`}
+                    onClick={() => handleTrade("buy")}
+                    disabled={!account}
+                    className="w-full bg-emerald-500/10 border-emerald-500 text-emerald-500 hover:bg-emerald-500 hover:text-black disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     Buy / Long
                 </Button>
                 <Button
-                    onClick={() => setSide("sell")}
-                    className={`w-full ${side === "sell" ? "bg-rose-500/10 border-rose-500 text-rose-500 hover:bg-rose-500 hover:text-white" : "opacity-50 grayscale"}`}
+                    onClick={() => handleTrade("sell")}
+                    disabled={!account}
+                    className="w-full bg-rose-500/10 border-rose-500 text-rose-500 hover:bg-rose-500 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     Sell / Short
                 </Button>
