@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 import { Background } from "@/components/Background";
 import { Countdown } from "@/components/Countdown";
 import { ProgramDetails } from "@/components/ProgramDetails";
+import { Manifesto } from "@/components/Manifesto";
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
       <Hero />
       <Countdown />
       <WhitelistRationale />
+      <Manifesto />
       <Offer />
       <ProgramDetails />
       <Footer />

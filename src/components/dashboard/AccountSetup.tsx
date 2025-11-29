@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/Button";
 import { useState } from "react";
 import { CheckCircle, XCircle, Award } from "lucide-react";
 
-const ACCOUNT_SIZES = [10000, 25000, 50000, 100000, 200000];
+const ACCOUNT_SIZES = [5000, 20000, 50000];
 
 export function AccountSetup() {
     const { account, startChallenge } = useEvaluation();
-    const [selectedSize, setSelectedSize] = useState(50000);
+    const [selectedSize, setSelectedSize] = useState(5000);
 
     if (account) {
         return (
@@ -25,8 +25,8 @@ export function AccountSetup() {
                         </p>
                     </div>
                     <div className={`flex items-center gap-2 px-4 py-2 rounded-sm ${account.status === 'active' ? 'bg-blue-900/20 text-blue-400' :
-                            account.status === 'passed' ? 'bg-green-900/20 text-green-400' :
-                                'bg-red-900/20 text-red-400'
+                        account.status === 'passed' ? 'bg-green-900/20 text-green-400' :
+                            'bg-red-900/20 text-red-400'
                         }`}>
                         {account.status === 'active' && <Activity className="w-5 h-5" />}
                         {account.status === 'passed' && <CheckCircle className="w-5 h-5" />}
@@ -105,8 +105,8 @@ export function AccountSetup() {
                         key={size}
                         onClick={() => setSelectedSize(size)}
                         className={`p-6 border transition-all ${selectedSize === size
-                                ? 'border-[var(--color-gold)] bg-[var(--color-gold)]/5'
-                                : 'border-zinc-800 hover:border-zinc-700'
+                            ? 'border-[var(--color-gold)] bg-[var(--color-gold)]/5'
+                            : 'border-zinc-800 hover:border-zinc-700'
                             }`}
                     >
                         <p className="text-2xl font-light text-white">${(size / 1000).toFixed(0)}K</p>

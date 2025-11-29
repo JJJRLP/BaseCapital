@@ -41,19 +41,19 @@ export const CONSTANTS = {
     CHALLENGE: {
         PROFIT_TARGET: 0.08, // 8%
         MAX_DAILY_LOSS: 0.05, // 5%
-        MAX_TOTAL_LOSS: 0.10, // 10%
-        MIN_TRADING_DAYS: 3,
+        MAX_TOTAL_LOSS: 0.08, // 8%
+        MIN_TRADING_DAYS: 5,
     },
     VERIFICATION: {
         PROFIT_TARGET: 0.05, // 5%
         MAX_DAILY_LOSS: 0.05,
-        MAX_TOTAL_LOSS: 0.10,
-        MIN_TRADING_DAYS: 3,
+        MAX_TOTAL_LOSS: 0.08, // 8%
+        MIN_TRADING_DAYS: 5,
     },
     FUNDED: {
         PROFIT_TARGET: 0, // No target
         MAX_DAILY_LOSS: 0.05,
-        MAX_TOTAL_LOSS: 0.10,
+        MAX_TOTAL_LOSS: 0.08, // 8%
         MIN_TRADING_DAYS: 0,
     },
 };

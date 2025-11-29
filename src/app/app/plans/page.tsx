@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Check, ShieldCheck } from "lucide-react";
+import { Check, ShieldCheck, TrendingUp, Trophy, Crown, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useRouter } from "next/navigation";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
@@ -10,57 +10,61 @@ interface Plan {
     id: string;
     name: string;
     price: string;
-    features: string[];
-    recommended?: boolean;
     description: string;
+    features: string[];
+    icon: React.ElementType;
+    recommended?: boolean;
     highlightedFeatures?: string[];
 }
 
 const plans: Plan[] = [
     {
-        id: "basic",
-        name: "Basic",
-        price: "300 USDC",
-        description: "Entry-level evaluation for aspiring traders.",
+        id: "starter",
+        name: "Starter",
+        price: "$49.99",
+        description: "Start your journey with a $5,000 account.",
+        icon: TrendingUp,
         features: [
-            "$50,000 Virtual Capital",
-            "Simulated Trading Environment",
-            "Basic PnL Targets",
-            "Standard Drawdown Limits",
-            "No Seed Phrases Needed",
+            "$5,000 Virtual Capital",
+            "8% Profit Target",
+            "8% Max Drawdown",
+            "5 Minimum Trading Days",
+            "Refundable Fee",
         ],
     },
     {
-        id: "pro",
-        name: "Pro",
-        price: "1,500 USDC",
-        description: "Professional evaluation with higher limits.",
+        id: "professional",
+        name: "Professional",
+        price: "$159.99",
+        description: "Step up with a $20,000 account.",
+        icon: Trophy,
         features: [
-            "$100,000 Virtual Capital",
-            "Enhanced Drawdown Limits",
-            "Priority Support 24/5",
-            "Advanced Analytics Suite",
-            "Reduced Trading Fees",
-            "Access to Pro Tools",
+            "$20,000 Virtual Capital",
+            "8% Profit Target",
+            "8% Max Drawdown",
+            "5 Minimum Trading Days",
+            "Refundable Fee",
+            "Priority Support",
         ],
-        highlightedFeatures: ["Enhanced Drawdown Limits", "Priority Support 24/5"],
+        highlightedFeatures: ["Priority Support"],
         recommended: true,
     },
     {
-        id: "elite",
-        name: "Elite",
-        price: "3,000 USDC",
-        description: "Maximum capital with revenue share.",
+        id: "executive",
+        name: "Executive",
+        price: "$299.99",
+        description: "Maximize potential with a $50,000 account.",
+        icon: Crown,
         features: [
-            "$250,000 Virtual Capital",
-            "Revenue Share Agreement",
-            "Dedicated Account Manager",
-            "Institutional Grade Data",
-            "Zero Trading Fees",
-            "Full API Access",
-            "VIP Event Access"
+            "$50,000 Virtual Capital",
+            "8% Profit Target",
+            "8% Max Drawdown",
+            "5 Minimum Trading Days",
+            "Refundable Fee",
+            "Dedicated Support",
+            "80% Profit Split"
         ],
-        highlightedFeatures: ["Revenue Share Agreement", "Zero Trading Fees"],
+        highlightedFeatures: ["80% Profit Split", "Dedicated Support"],
     },
 ];
 
@@ -87,16 +91,15 @@ export default function PlansPage() {
                             Select Your <span className="font-script text-[var(--color-gold)]">Tier</span>
                         </h1>
                         <p className="text-zinc-400 font-light text-xl max-w-2xl mx-auto">
-                            Scale your trading potential with our tailored capital allocation plans.
+                            Choose the capital allocation that fits your trading goals.
                         </p>
                     </motion.div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center px-4">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 px-4 md:px-8 items-stretch">
                     {plans.map((plan, index) => {
-                        const isBasic = plan.id === "basic";
-                        const isPro = plan.id === "pro";
-                        const isElite = plan.id === "elite";
+                        const isRecommended = plan.recommended;
+                        const Icon = plan.icon;
 
                         return (
                             <motion.div
@@ -104,59 +107,65 @@ export default function PlansPage() {
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.2 + index * 0.1 }}
-                                className={`relative flex flex-col rounded-2xl transition-all duration-300 ${isPro
-                                    ? "bg-zinc-900/90 border-2 border-[var(--color-gold)] shadow-[0_0_60px_-15px_rgba(212,175,55,0.3)] z-20 py-12 px-8 lg:-mt-8 lg:-mb-8"
-                                    : isElite
-                                        ? "bg-zinc-900/60 border border-zinc-700 hover:border-zinc-500 z-10 py-10 px-8"
-                                        : "bg-zinc-950/40 border border-zinc-800/50 hover:border-zinc-700 opacity-90 hover:opacity-100 py-8 px-8"
+                                className={`relative flex flex-col rounded-3xl p-8 transition-all duration-300 ${isRecommended
+                                    ? "bg-zinc-900 border border-[var(--color-gold)] shadow-[0_0_40px_-10px_rgba(212,175,55,0.15)] z-20 scale-105"
+                                    : "bg-zinc-950/50 border border-zinc-800 hover:border-zinc-700 z-10"
                                     }`}
                             >
-                                {isPro && (
-                                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-full flex justify-center">
-                                        <div className="bg-[var(--color-gold)] text-black text-xs font-bold px-6 py-1.5 uppercase tracking-widest rounded-full shadow-lg flex items-center gap-2">
-                                            <ShieldCheck className="w-3 h-3" />
-                                            Professional Choice
-                                        </div>
-                                    </div>
-                                )}
+                                {/* Icon */}
+                                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-6 ${isRecommended
+                                    ? "bg-[var(--color-gold)] text-black"
+                                    : "bg-zinc-900 text-white border border-zinc-800"
+                                    }`}>
+                                    <Icon className="w-6 h-6" />
+                                </div>
 
-                                <div className="text-center mb-8 pt-2">
-                                    <h3 className={`text-2xl font-medium mb-2 ${isPro ? "text-[var(--color-gold)]" : "text-white"}`}>
+                                {/* Title & Description */}
+                                <div className="mb-8">
+                                    <h3 className={`text-2xl font-medium mb-2 ${isRecommended ? "text-white" : "text-white"}`}>
                                         {plan.name}
                                     </h3>
-                                    <div className="flex items-baseline justify-center gap-1 mb-4">
-                                        <span className={`font-light text-white tracking-tighter ${isPro ? "text-5xl" : "text-4xl"}`}>
+                                    <p className="text-zinc-400 text-sm leading-relaxed min-h-[40px]">
+                                        {plan.description}
+                                    </p>
+                                </div>
+
+                                {/* Price */}
+                                <div className="mb-8">
+                                    <p className="text-xs text-zinc-500 uppercase tracking-wider mb-1">Starting at</p>
+                                    <div className="flex items-baseline gap-1">
+                                        <span className={`text-4xl font-semibold tracking-tight ${isRecommended ? "text-white" : "text-white"}`}>
                                             {plan.price}
                                         </span>
                                     </div>
-                                    <p className="text-base text-zinc-500 font-light px-2">{plan.description}</p>
                                 </div>
 
-                                <div className="space-y-4 mb-10 flex-1">
-                                    {plan.features.map((feature, i) => {
-                                        const isHighlighted = plan.highlightedFeatures?.some(hf => feature.includes(hf));
-                                        return (
-                                            <div key={i} className="flex items-start gap-3 text-sm">
-                                                <div className={`mt-0.5 p-0.5 rounded-full shrink-0 ${isHighlighted ? "bg-[var(--color-gold)] text-black" : "bg-zinc-800 text-zinc-500"}`}>
-                                                    <Check className={`w-3 h-3 ${isHighlighted ? "text-black" : "text-zinc-500"}`} />
-                                                </div>
-                                                <span className={`${isHighlighted ? "text-[var(--color-gold)] font-medium" : "text-zinc-300"}`}>
-                                                    {feature}
-                                                </span>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-
+                                {/* Action Button */}
                                 <Button
                                     onClick={() => handleSelectPlan(plan.id)}
-                                    className={`w-full text-sm tracking-widest uppercase transition-all duration-300 ${isPro
-                                        ? "bg-[var(--color-gold)] text-black hover:bg-amber-400 hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] border-none font-bold py-6 text-base"
-                                        : "bg-transparent border-zinc-700 hover:border-white text-white hover:bg-white/5 py-4"
+                                    className={`w-full py-6 text-sm font-medium tracking-wide mb-8 flex items-center justify-center gap-2 ${isRecommended
+                                        ? "bg-[var(--color-gold)] text-black hover:bg-[var(--color-gold)]/90"
+                                        : "bg-white text-black hover:bg-zinc-200"
                                         }`}
                                 >
-                                    Select {plan.name}
+                                    Select Plan <ArrowRight className="w-4 h-4" />
                                 </Button>
+
+                                {/* Features */}
+                                <div className="flex-1">
+                                    <p className="text-xs text-zinc-500 font-medium mb-4 uppercase tracking-wider">Plan Includes:</p>
+                                    <ul className="space-y-3">
+                                        {plan.features.map((feature, i) => (
+                                            <li key={i} className="flex items-start gap-3 text-sm">
+                                                <div className={`mt-0.5 p-0.5 rounded-full shrink-0 ${isRecommended ? "bg-zinc-800 text-[var(--color-gold)]" : "bg-zinc-900 text-zinc-400"
+                                                    }`}>
+                                                    <Check className="w-3 h-3" />
+                                                </div>
+                                                <span className="text-zinc-300">{feature}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
                             </motion.div>
                         );
                     })}
