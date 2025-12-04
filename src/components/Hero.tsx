@@ -15,7 +15,7 @@ export function Hero() {
     const opacity = useTransform(scrollY, [0, 300], [1, 0]);
 
     return (
-        <section className="relative min-h-[100dvh] w-full overflow-hidden flex items-center justify-center py-20 md:py-0">
+        <section className="relative min-h-[100dvh] w-full overflow-hidden flex items-center justify-center py-12 md:py-0">
             <div className="absolute top-6 left-6 md:top-10 md:left-10 z-50">
                 <WalletConnect />
             </div>
@@ -35,7 +35,7 @@ export function Hero() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
                 >
-                    <span className="inline-block py-1 px-3 border border-zinc-800 rounded-full text-[10px] md:text-xs tracking-[0.2em] text-zinc-500 uppercase mb-6 backdrop-blur-sm">
+                    <span className="inline-block py-1 px-3 border border-zinc-800 rounded-full text-[10px] md:text-xs tracking-[0.2em] text-zinc-500 uppercase mb-4 md:mb-6 backdrop-blur-sm">
                         {t.hero.tag}
                     </span>
                 </motion.div>
@@ -44,17 +44,17 @@ export function Hero() {
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-                    className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-light tracking-tighter text-white mb-6"
+                    className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-light tracking-tighter text-white mb-6"
                 >
                     {t.hero.title_prefix} <br />
-                    <span className="font-script text-5xl sm:text-6xl md:text-8xl lg:text-9xl text-gold-shine ml-2 block sm:inline mt-2 sm:mt-0">{t.hero.title_suffix}</span>
+                    <span className="font-script text-4xl sm:text-6xl md:text-8xl lg:text-9xl text-gold-shine ml-2 block sm:inline mt-2 sm:mt-0">{t.hero.title_suffix}</span>
                 </motion.h1>
 
                 <motion.p
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-                    className="text-base md:text-xl text-zinc-400 max-w-xl mx-auto mb-10 font-light leading-relaxed px-4 md:px-0"
+                    className="text-base md:text-xl text-zinc-400 max-w-xl mx-auto mb-8 md:mb-10 font-light leading-relaxed px-4 md:px-0"
                 >
                     {t.hero.description}
                 </motion.p>

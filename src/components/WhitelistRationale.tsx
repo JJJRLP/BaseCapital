@@ -9,17 +9,17 @@ import { useLanguage } from "@/contexts/LanguageContext";
 export function WhitelistRationale() {
     const { t } = useLanguage();
     return (
-        <section className="py-20 md:py-32 px-6 bg-[#050505] relative overflow-hidden">
+        <section className="py-12 md:py-32 px-6 bg-[#050505] relative overflow-hidden">
             <div className="container mx-auto max-w-6xl">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.8 }}
-                    className="mb-12 md:mb-20 text-center"
+                    className="mb-8 md:mb-20 text-center"
                 >
                     <h2 className="text-3xl md:text-5xl font-light text-white mb-6">
-                        {t.whitelist.title_prefix} <span className="font-script text-5xl md:text-6xl text-[var(--color-gold)] mx-2 block md:inline mt-2 md:mt-0">{t.whitelist.title_suffix}</span> Rationale
+                        {t.whitelist.title_prefix} <span className="font-script text-4xl md:text-6xl text-[var(--color-gold)] mx-2 block md:inline mt-2 md:mt-0">{t.whitelist.title_suffix}</span> Rationale
                     </h2>
                     <p className="text-zinc-400 max-w-2xl mx-auto text-lg font-light">
                         {t.whitelist.description}

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/Button";
 
 export function Manifesto() {
     return (
-        <section className="py-24 bg-zinc-950 relative overflow-hidden">
+        <section className="py-12 md:py-24 bg-zinc-950 relative overflow-hidden">
             {/* Background Elements */}
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
                 <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[var(--color-gold)]/5 rounded-full blur-3xl" />
@@ -42,7 +42,7 @@ export function Manifesto() {
                         </div>
 
                         <Link href="/manifesto">
-                            <Button variant="outline" className="border-zinc-700 hover:bg-zinc-900 text-white px-8 py-6 text-base group">
+                            <Button variant="outline" className="border-zinc-700 hover:bg-zinc-900 text-white px-6 py-4 md:px-8 md:py-6 text-base group">
                                 Read Full Manifesto <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                             </Button>
                         </Link>

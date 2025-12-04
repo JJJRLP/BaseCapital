@@ -41,7 +41,7 @@ export function Countdown() {
     }, []);
 
     return (
-        <section className="py-12 md:py-20 px-6 border-y border-zinc-900/50 bg-zinc-900/10 backdrop-blur-sm">
+        <section className="py-8 md:py-20 px-6 border-y border-zinc-900/50 bg-zinc-900/10 backdrop-blur-sm">
             <div className="container mx-auto max-w-4xl text-center">
                 <motion.h3
                     initial={{ opacity: 0, y: 20 }}
@@ -70,7 +70,7 @@ function TimeUnit({ value, label }: { value: number; label: string }) {
                 key={value}
                 initial={{ y: 10, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                className="text-4xl sm:text-5xl md:text-7xl font-light text-white tabular-nums font-script" // Using script font for numbers as a stylistic choice, or keep sans for readability. User asked for elite. Let's try sans for readability but maybe gold?
+                className="text-3xl sm:text-5xl md:text-7xl font-light text-white tabular-nums font-script" // Using script font for numbers as a stylistic choice, or keep sans for readability. User asked for elite. Let's try sans for readability but maybe gold?
             >
                 <span className="font-sans text-white">{value.toString().padStart(2, "0")}</span>
             </motion.div>

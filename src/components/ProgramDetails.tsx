@@ -40,16 +40,16 @@ const specs = [
 
 export function ProgramDetails() {
     return (
-        <section className="py-24 px-6 bg-[#050505] border-t border-zinc-900">
+        <section className="py-12 md:py-24 px-6 bg-[#050505] border-t border-zinc-900">
             <div className="container mx-auto max-w-6xl">
                 {/* Header */}
-                <div className="mb-20 text-center">
+                <div className="mb-12 md:mb-20 text-center">
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6 }}
-                        className="text-4xl md:text-5xl font-light text-white mb-6"
+                        className="text-3xl md:text-5xl font-light text-white mb-6"
                     >
                         High Stakes <span className="font-script text-[var(--color-gold)]">Program</span>
                     </motion.h2>
@@ -65,7 +65,7 @@ export function ProgramDetails() {
                     </motion.p>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-16">
+                <div className="grid md:grid-cols-2 gap-10 md:gap-16">
                     {/* Benefits Column */}
                     <div>
                         <motion.h3
