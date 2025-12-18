@@ -1,123 +1,111 @@
-# Deployment Guide for BaseCapital
+# Deployment Guide for Base Capital
 
-This guide details how to configure and deploy your BaseCapital dApp to the Base network using Vercel.
+This guide covers deploying the Base Capital dApp to Base network using Vercel (frontend) and Foundry (smart contracts).
 
-## 1. Prerequisites
+## Prerequisites
 
-Before you begin, ensure you have the following:
+- **GitHub Account** - For hosting code
+- **Vercel Account** - For frontend deployment
+- **Coinbase Developer Platform (CDP) Account** - For OnchainKit API keys
+- **Foundry** - For smart contract deployment
 
--   **GitHub Account**: For hosting your code.
--   **Vercel Account**: For deploying the frontend.
--   **Coinbase Developer Platform (CDP) Account**: For OnchainKit API keys.
+## Frontend Deployment
 
-## 2. Configuration
+### 1. Configure OnchainKit
 
-### Step 1: Get OnchainKit API Key
+1. Login to [Coinbase Developer Platform](https://portal.cdp.coinbase.com/)
+2. Create a project for "Base Capital"
+3. Get your **Client Key** (public) from the API Keys section
+4. Allow your domains in the allowed origins
 
-1.  Log in to the [Coinbase Developer Platform](https://portal.cdp.coinbase.com/).
-2.  Create a new project (e.g., "BaseCapital").
-3.  Navigate to the **API Keys** section or **OnchainKit** section.
-4.  Create a new API Key. You will need the **Client Key** (public) for your frontend.
-    *   *Note: Ensure you allow the domains you will be deploying to (e.g., `localhost:3000` for dev, `your-app.vercel.app` for prod) in the allowed origins if applicable.*
+### 2. Environment Variables
 
-### Step 2: Configure Environment Variables
-
-Create a `.env.local` file in the root of your project (if it doesn't exist) and add your API key:
+Create `.env.local`:
 
 ```bash
-NEXT_PUBLIC_ONCHAINKIT_API_KEY=your_public_api_key_here
+# OnchainKit
+NEXT_PUBLIC_ONCHAINKIT_API_KEY=your_api_key
+
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+
+# Database
+DATABASE_URL=your_database_url
+DIRECT_URL=your_direct_url
 ```
 
-### Step 3: Prepare for Production (Mainnet)
+### 3. Network Configuration
 
-Currently, your project is configured for **Base Sepolia** (Testnet). For production, you need to switch to **Base Mainnet**.
-
-1.  Open `src/components/OnchainProviders.tsx`.
-2.  Update the imports and configuration to include `base`:
+The app supports both testnet and mainnet. Edit `src/components/OnchainProviders.tsx`:
 
 ```typescript
-// src/components/OnchainProviders.tsx
-
-// 1. Import 'base'
-import { base, baseSepolia } from 'wagmi/chains'; 
-
-// ...
+import { base, baseSepolia } from 'wagmi/chains';
 
 const wagmiConfig = createConfig({
-    // 2. Update chains array to include 'base' (or replace baseSepolia if you only want mainnet)
-    chains: [base, baseSepolia], 
+    chains: [base, baseSepolia],
     connectors: [
         coinbaseWallet({
             appName: 'BaseCapital',
             preference: { options: 'smartWalletOnly' },
         }),
     ],
-    ssr: true,
-    transports: {
-        [base.id]: http(), // 3. Add transport for Base Mainnet
-        [baseSepolia.id]: http(),
-    },
+    // ...
 });
-
-// ...
-
-export function OnchainProviders({ children }: OnchainProvidersProps) {
-    return (
-        <WagmiProvider config={wagmiConfig}>
-            <QueryClientProvider client={queryClient}>
-                <OnchainKitProvider
-                    apiKey={process.env.NEXT_PUBLIC_ONCHAINKIT_API_KEY}
-                    chain={base} // 4. Set default chain to 'base' for production
-                >
-                    {children}
-                </OnchainKitProvider>
-            </QueryClientProvider>
-        </WagmiProvider>
-    );
-}
 ```
 
-> **Tip**: You can use an environment variable to switch chains dynamically if you want to keep both testnet and mainnet configurations.
+### 4. Deploy to Vercel
 
-## 3. Deployment to Vercel
+1. Push code to GitHub
+2. Import project in Vercel
+3. Add environment variables in Vercel settings
+4. Deploy
 
-1.  **Push to GitHub**: Ensure your latest code is pushed to your GitHub repository.
-2.  **Import Project in Vercel**:
-    *   Go to your Vercel Dashboard.
-    *   Click **"Add New..."** -> **"Project"**.
-    *   Import your `BaseCapital` repository.
-3.  **Configure Project**:
-    *   **Framework Preset**: Next.js (should be auto-detected).
-    *   **Root Directory**: `./` (default).
-4.  **Environment Variables**:
-    *   Expand the "Environment Variables" section.
-    *   Add `NEXT_PUBLIC_ONCHAINKIT_API_KEY` with your production API key from CDP.
-5.  **Deploy**: Click **"Deploy"**.
+## Smart Contract Deployment
 
-## 4. Verification
+See [contracts/README.md](./contracts/README.md) for full instructions.
 
-After deployment:
+### Quick Start
 
-1.  Visit your Vercel deployment URL (e.g., `https://base-capital.vercel.app`).
-2.  Check the browser console for any errors.
-3.  Try connecting your wallet.
-    *   Since you are using `smartWalletOnly`, it should prompt to create or connect a Coinbase Smart Wallet (Passkey).
-4.  Verify that the network is correct (Base Mainnet).
+```bash
+cd contracts
+source .env
 
-## 5. Smart Contracts (Optional)
+# Testnet
+forge script script/Deploy.s.sol:Deploy \
+  --rpc-url $BASE_SEPOLIA_RPC_URL \
+  --broadcast --verify
 
-If you plan to deploy smart contracts:
+# Mainnet
+forge script script/Deploy.s.sol:DeployMainnet \
+  --rpc-url $BASE_MAINNET_RPC_URL \
+  --broadcast --verify
+```
 
-1.  Use **Hardhat** or **Foundry**.
-2.  Configure your `hardhat.config.ts` or `foundry.toml` with Base network settings.
-    *   **Base Mainnet RPC**: `https://mainnet.base.org`
-    *   **Base Sepolia RPC**: `https://sepolia.base.org`
-    *   **Chain ID**: `8453` (Mainnet), `84532` (Sepolia)
-3.  Verify your contracts on [Basescan](https://basescan.org/) after deployment.
+### Update Frontend Contract Addresses
 
----
+After deployment, update `src/lib/contracts.ts`:
 
-**Resources:**
--   [Base Documentation](https://docs.base.org/)
--   [OnchainKit Documentation](https://onchainkit.xyz/)
--   [Vercel Deployment Docs](https://vercel.com/docs)
+```typescript
+export const CONTRACTS = {
+    PROP_FIRM_FACTORY: '0x...',
+    RISK_MANAGER: '0x...',
+    TREASURY: '0x...',
+    USDC: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913', // Base Mainnet
+};
+```
+
+## Verification
+
+1. Visit your Vercel deployment
+2. Connect wallet (Smart Wallet with Passkeys)
+3. Verify network is correct (Base Mainnet/Sepolia)
+4. Test challenge registration flow
+
+## Resources
+
+- [Base Documentation](https://docs.base.org/)
+- [OnchainKit Documentation](https://onchainkit.xyz/)
+- [Foundry Book](https://book.getfoundry.sh/)
+- [Supabase Documentation](https://supabase.com/docs)

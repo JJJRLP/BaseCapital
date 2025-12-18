@@ -1,88 +1,116 @@
 # Smart Contract Architecture for Base Capital
 
-This document outlines the smart contract infrastructure required to transition **Base Capital** from a simulated environment to a fully on-chain Proprietary Trading Firm on the **Base** blockchain.
+This document outlines the smart contract infrastructure for **Base Capital** - a fully on-chain Proprietary Trading Firm on the **Base** blockchain.
 
 ## Overview
 
-The goal is to replace the current `EvaluationContext` (local state) with immutable smart contracts that enforce trading rules, manage funds, and handle the progression of traders through the **Challenge**, **Verification**, and **Funded** stages.
+Base Capital replaces traditional off-chain prop firm infrastructure with immutable smart contracts that:
+- Enforce trading rules on-chain
+- Manage firm capital through isolated smart wallets
+- Handle trader progression through Challenge → Verification → Funded stages
 
-We will leverage **Account Abstraction (ERC-4337)** or **Smart Contract Wallets** to give traders a controlled environment where they can trade on real DEXs (like Aerodrome or Uniswap on Base) while the protocol enforces risk parameters.
+We leverage **Smart Contract Wallets** to give traders a controlled trading environment on real DEXs (Aerodrome, Uniswap) while the protocol enforces risk parameters.
 
 ## Core Smart Contracts
 
-### 1. `PropFirmFactory.sol` (The Onboarding Layer)
-**Purpose**: Manages user registration, fee collection, and the deployment of Trader Accounts.
+### 1. `PropFirmFactory.sol` (Onboarding Layer)
 
-*   **Functions**:
-    *   `startChallenge(uint256 planId)`: Accepts the registration fee (in USDC/ETH) and deploys a new `TraderAccount` for the user.
-    *   `upgradeUser(address trader)`: Verifies if a trader has passed a stage and upgrades them (e.g., Challenge -> Verification).
-*   **Base Integration**: Optimized for Base's low gas fees to keep onboarding costs negligible.
+Manages user registration, fee collection, and stage progression.
 
-### 2. `TraderAccount.sol` (The Smart Wallet)
-**Purpose**: A smart contract wallet controlled by the trader but restricted by the protocol. This holds the trading capital (or "demo" capital in early stages).
+| Function | Description |
+|----------|-------------|
+| `startChallenge(planId)` | Accepts USDC fee, registers trader |
+| `upgradeTrader(trader)` | Advances trader to next stage |
+| `failTrader(trader)` | Marks trader as failed |
 
-*   **Key Features**:
-    *   **Whitelisted Interactions**: Can ONLY interact with approved protocols (e.g., Aerodrome Router, Uniswap Router).
-    *   **Restricted Withdrawals**: The trader CANNOT withdraw the principal capital.
-    *   **Owner Access**: The trader can sign transactions to execute swaps.
-*   **Why**: This allows "Real" trading on-chain without giving the trader custody of the firm's funds.
+### 2. `TraderAccount.sol` (Smart Wallet)
+
+Isolated smart wallet controlled by trader but restricted by protocol.
+
+**Key Features:**
+- ✅ Whitelisted DEX interactions only (Aerodrome, Uniswap)
+- ✅ Traders can execute swaps via `executeSwap()`
+- ❌ Cannot withdraw principal capital
+- ✅ Can withdraw profits above initial balance
 
 ### 3. `RiskManager.sol` (The Enforcer)
-**Purpose**: Replaces `checkRules` in `prop-firm-logic.ts`. It monitors the `TraderAccount` equity and enforces drawdown rules.
 
-*   **Logic**:
-    *   **Max Daily Loss**: Tracks equity at 00:00 UTC vs current equity.
-    *   **Max Total Loss**: Tracks initial balance vs current equity.
-    *   **Profit Target**: Checks if the balance >= target.
-*   **Enforcement**:
-    *   `checkStatus(address traderAccount)`: Callable by anyone (or a Keeper bot).
-    *   If a rule is violated, it calls `liquidate()` on the `TraderAccount`, disabling the trader's access.
+Real-time rule enforcement via Chainlink Automation.
 
-### 4. `Treasury.sol` (The Vault)
-**Purpose**: Holds the protocol's revenue (challenge fees) and the liquidity pool for funded traders.
+| Rule | Challenge | Verification | Funded |
+|------|-----------|--------------|--------|
+| Profit Target | 8% | 5% | N/A |
+| Max Daily Loss | 5% | 5% | 5% |
+| Max Total Loss | 8% | 8% | 10% |
+| Min Trading Days | 5 | 5 | 0 |
 
-*   **Functions**:
-    *   `withdrawFees()`: For protocol admins.
-    *   `payoutTrader(address trader, uint256 amount)`: Sends profit splits to successful funded traders.
+**Functions:**
+- `checkStatus(account)` - Evaluates trader against rules
+- `batchCheckStatus(accounts)` - Batch evaluation for keepers
+- `checkUpkeep()` / `performUpkeep()` - Chainlink Automation interface
 
-## Data Flow & Architecture
+### 4. `Treasury.sol` (Capital Management)
+
+Holds firm capital and manages profit distributions.
+
+| Function | Description |
+|----------|-------------|
+| `seedAccount(account, planId)` | Allocates capital to funded trader |
+| `processProfitWithdrawal()` | Handles 80/20 profit split |
+| `recoverCapital(account)` | Recovers funds from liquidated accounts |
+
+**Profit Split:** 80% trader / 20% protocol
+
+### 5. `CertificateNFT.sol` (Achievement System)
+
+ERC-721 NFTs minted when traders complete stages.
+
+## Data Flow
 
 ```mermaid
 graph TD
-    User[User] -->|1. Pay Fee| Factory[PropFirmFactory.sol]
-    Factory -->|2. Deploy| Account[TraderAccount.sol]
+    User[User] -->|1. Pay USDC Fee| Factory[PropFirmFactory]
+    Factory -->|2. Register| OnChain[On-Chain Record]
     
-    User -->|3. Execute Trade| Account
-    Account -->|4. Swap Tokens| DEX[Aerodrome / Uniswap]
+    User -->|3. Trade Simulation| OffChain[Off-Chain Engine]
     
-    Keeper[Keeper Bot / Oracle] -->|5. Monitor Equity| RiskManager[RiskManager.sol]
-    RiskManager -->|6. Liquidate if Fail| Account
-    RiskManager -->|7. Upgrade if Pass| Factory
+    OffChain -->|4. Pass Stage| Factory
+    Factory -->|5. Mint| NFT[CertificateNFT]
+    
+    Factory -->|6. Funded| TAFactory[TraderAccountFactory]
+    TAFactory -->|7. Deploy| Account[TraderAccount]
+    
+    Treasury -->|8. Seed Capital| Account
+    
+    User -->|9. Execute Trades| Account
+    Account -->|10. Swap| DEX[Aerodrome / Uniswap]
+    
+    Keeper[Chainlink Keepers] -->|11. Monitor| RiskManager
+    RiskManager -->|12. Liquidate/Upgrade| Account
+    
+    Account -->|13. Withdraw Profits| Treasury
+    Treasury -->|14. 80/20 Split| User
 ```
 
-## Base.org Specific Integrations
+## Base Integration Points
 
-1.  **Coinbase Smart Wallet**:
-    *   We will integrate the **Smart Wallet** SDK to allow users to sign into the app using Passkeys, removing the need for a browser extension wallet. This lowers the barrier to entry significantly.
-    
-2.  **Gas Efficiency**:
-    *   Base is an L2. We can perform frequent `checkStatus` calls (via Keepers) without incurring massive costs, ensuring real-time rule enforcement.
+### Coinbase Smart Wallet
+Users sign in with **Passkeys** - no browser extension needed. Smart Wallet provides seamless onboarding with account abstraction.
 
-3.  **USDC on Base**:
-    *   All accounting will be done in **USDC** (native on Base) to avoid volatility in the trader's principal balance.
+### Gas Efficiency
+Base L2 enables frequent `checkStatus()` calls via Keepers without massive costs, ensuring real-time rule enforcement.
 
-## Development Roadmap
+### USDC on Base
+All accounting in **USDC** (native on Base) avoids volatility risk in trader's principal balance.
 
-1.  **Phase 1: The "Paper" Layer (Current)**
-    *   Keep logic off-chain (current state).
-    *   Use `EvaluationContext` to simulate trades.
-    
-2.  **Phase 2: Hybrid Verification**
-    *   Deploy `PropFirmFactory` to take fees on-chain.
-    *   Keep trading off-chain (simulated).
-    *   Mint an NFT "Certificate" when a user passes.
+## Development Phases
 
-3.  **Phase 3: Fully On-Chain (The Goal)**
-    *   Deploy `TraderAccount` smart wallets.
-    *   Seed accounts with real USDC.
-    *   Allow trading on whitelisted DEXs.
+| Phase | Status | Description |
+|-------|--------|-------------|
+| Phase 1: Paper | ✅ Complete | Off-chain simulation via EvaluationContext |
+| Phase 2: Hybrid | ✅ Complete | On-chain fees + off-chain trading + NFT certificates |
+| Phase 3: On-Chain | ✅ Complete | Full smart wallet trading with RiskManager |
+
+## Contract Addresses
+
+See [contracts/README.md](./contracts/README.md) for deployed addresses.

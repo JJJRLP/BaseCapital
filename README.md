@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Base Capital
 
-## Getting Started
+**On-chain prop trading infrastructure built on Base.**
 
-First, run the development server:
+## Overview
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Base Capital is a decentralized proprietary trading firm that enables traders to access firm capital through smart contract-enforced risk management. Built natively on Base with USDC accounting.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The BAse Capital Manifesto will 
+## Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Frontend**: Next.js 15, TypeScript, React 19
+- **Blockchain**: Base (Coinbase L2), Solidity, Foundry
+- **Wallet**: OnchainKit with Coinbase Smart Wallet + Passkeys
+- **Payments**: USDC on Base for subscriptions and payouts
+- **Database**: Supabase (PostgreSQL) + Prisma ORM
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Smart Contracts
 
-## Learn More
+| Contract | Purpose |
+|----------|---------|
+| `PropFirmFactory.sol` | Challenge deployment and lifecycle management |
+| `TraderAccount.sol` | Isolated smart wallet for whitelisted DEX trades |
+| `RiskManager.sol` | Real-time drawdown enforcement and position limits |
+| `Treasury.sol` | USDC capital pool and profit distribution |
+| `CertificateNFT.sol` | On-chain achievement certificates |
 
-To learn more about Next.js, take a look at the following resources:
+## Key Features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- ⚡ **Instant USDC Payouts** - No banking friction
+- 🔐 **Smart Wallet Auth** - Passkey-based, no seed phrases
+- 📊 **On-Chain Risk Management** - Transparent and verifiable
+- 🎯 **Whitelisted DEX Trading** - Aerodrome, Uniswap on Base
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Business Model
 
-## Deploy on Vercel
+### Challenge Fees (One-time, in USDC)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Plan | Fee | Funded Capital |
+|------|-----|----------------|
+| Starter | $49.99 | $5,000 |
+| Professional | $159.99 | $25,000 |
+| Executive | $299.99 | $50,000 |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Profit Split (Recurring, on funded accounts)
+
+| Party | Share |
+|-------|-------|
+| Trader | 80% |
+| Protocol | 20% |
+
+Profit splits are enforced on-chain via `Treasury.sol`. Traders can only withdraw profits above their initial capital allocation.
+
+## Development Workflow
+
+This project follows a **local-first development approach**. Extensive testing and iteration happens on local development environments before changes are pushed to the repository. This ensures cleaner commit history and production-ready code.
+
+## License
+
+[MIT](./LICENSE)
+
+## Security
+
+See [SECURITY.md](./SECURITY.md) for our security model and vulnerability reporting.
