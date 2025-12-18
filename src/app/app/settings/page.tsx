@@ -6,18 +6,39 @@ import { Input } from "@/components/ui/Input";
 import { PageTransition } from "@/components/ui/PageTransition";
 import { PlanSelectionModal } from "@/components/dashboard/PlanSelectionModal";
 import { motion } from "framer-motion";
-import { Bell, Lock, Shield, User, Wallet, CreditCard } from "lucide-react";
-import { useState } from "react";
-
+import { Bell, Lock, Shield, User, CreditCard, Loader2, Wallet } from "lucide-react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
+import { useAccount } from "wagmi";
 
 export default function SettingsPage() {
     const router = useRouter();
+    const { profile, refreshProfile, linkWallet, isLoading: authLoading } = useAuth();
+    const { address, isConnected } = useAccount();
     const [activeTab, setActiveTab] = useState("profile");
     const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
+    const [isLinkingWallet, setIsLinkingWallet] = useState(false);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+    const [formData, setFormData] = useState({
+        displayName: "",
+        email: "",
+    });
+
+    useEffect(() => {
+        if (profile) {
+            setFormData({
+                displayName: profile.displayName || "",
+                email: profile.email,
+            });
+        }
+    }, [profile]);
 
     const tabs = [
         { id: "profile", label: "Profile", icon: User },
+        { id: "wallets", label: "Wallets", icon: Wallet },
         { id: "security", label: "Security", icon: Lock },
         { id: "subscription", label: "Subscription", icon: CreditCard },
         { id: "preferences", label: "Preferences", icon: Bell },
@@ -26,8 +47,44 @@ export default function SettingsPage() {
     const handleUpgrade = (planId: string) => {
         console.log("Upgrading to:", planId);
         setShowUpgradeModal(false);
-        // Handle upgrade logic here
     };
+
+    const handleSaveProfile = async () => {
+        setIsSaving(true);
+        try {
+            const response = await fetch('/api/user/profile', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ displayName: formData.displayName }),
+            });
+
+            if (response.ok) {
+                await refreshProfile();
+                setSuccessMessage("Profile updated successfully!");
+                setTimeout(() => setSuccessMessage(null), 3000);
+            }
+        } catch (error) {
+            console.error('Save profile error:', error);
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    const handleLinkWallet = async () => {
+        if (!address) return;
+        setIsLinkingWallet(true);
+        try {
+            const result = await linkWallet(address, !profile?.wallets?.length);
+            if (!result.error) {
+                setSuccessMessage("Wallet linked successfully!");
+                setTimeout(() => setSuccessMessage(null), 3000);
+            }
+        } finally {
+            setIsLinkingWallet(false);
+        }
+    };
+
+    const isWalletLinked = profile?.wallets?.some(w => w.address.toLowerCase() === address?.toLowerCase());
 
     return (
         <DashboardLayout>
@@ -49,6 +106,16 @@ export default function SettingsPage() {
                             Manage your account settings and preferences.
                         </p>
                     </motion.div>
+
+                    {successMessage && (
+                        <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="mb-6 p-4 bg-green-500/10 border border-green-500/20 text-green-400 text-sm rounded"
+                        >
+                            {successMessage}
+                        </motion.div>
+                    )}
 
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                         {/* Sidebar Navigation */}
@@ -79,31 +146,98 @@ export default function SettingsPage() {
                             >
                                 {activeTab === "profile" && (
                                     <div className="space-y-8">
-                                        <div>
-                                            <h2 className="text-xl font-light text-white mb-6 border-b border-zinc-800 pb-4">Profile Information</h2>
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                                <Input label="First Name" defaultValue="Alex" />
-                                                <Input label="Last Name" defaultValue="Mercer" />
-                                                <Input label="Email Address" defaultValue="alex.mercer@example.com" type="email" />
-                                                <Input label="Phone Number" defaultValue="+1 (555) 000-0000" />
+                                        {authLoading ? (
+                                            <div className="flex items-center justify-center py-12">
+                                                <Loader2 className="w-8 h-8 animate-spin text-[var(--color-gold)]" />
                                             </div>
-                                        </div>
-
-                                        <div>
-                                            <h2 className="text-xl font-light text-white mb-6 border-b border-zinc-800 pb-4">Public Profile</h2>
-                                            <div className="space-y-6">
-                                                <Input label="Display Name" defaultValue="AlexTrader99" />
-                                                <div className="flex items-center gap-4">
-                                                    <div className="w-20 h-20 bg-zinc-800 rounded-full flex items-center justify-center text-2xl">
-                                                        AM
+                                        ) : (
+                                            <>
+                                                <div>
+                                                    <h2 className="text-xl font-light text-white mb-6 border-b border-zinc-800 pb-4">Profile Information</h2>
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                        <Input
+                                                            label="Email Address"
+                                                            value={formData.email}
+                                                            type="email"
+                                                            disabled
+                                                        />
+                                                        <Input
+                                                            label="Display Name"
+                                                            value={formData.displayName}
+                                                            onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
+                                                        />
                                                     </div>
-                                                    <Button variant="outline" size="sm">Change Avatar</Button>
                                                 </div>
-                                            </div>
-                                        </div>
 
-                                        <div className="flex justify-end pt-4">
-                                            <Button>Save Changes</Button>
+                                                <div>
+                                                    <h2 className="text-xl font-light text-white mb-6 border-b border-zinc-800 pb-4">Avatar</h2>
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="w-20 h-20 bg-zinc-800 rounded-full flex items-center justify-center text-2xl">
+                                                            {formData.displayName?.substring(0, 2).toUpperCase() || "??"}
+                                                        </div>
+                                                        <Button variant="outline" size="sm">Change Avatar</Button>
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex justify-end pt-4">
+                                                    <Button onClick={handleSaveProfile} disabled={isSaving}>
+                                                        {isSaving ? (
+                                                            <>
+                                                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                                                Saving...
+                                                            </>
+                                                        ) : "Save Changes"}
+                                                    </Button>
+                                                </div>
+                                            </>
+                                        )}
+                                    </div>
+                                )}
+
+                                {activeTab === "wallets" && (
+                                    <div className="space-y-8">
+                                        <div>
+                                            <h2 className="text-xl font-light text-white mb-6 border-b border-zinc-800 pb-4">Linked Wallets</h2>
+
+                                            {profile?.wallets?.length ? (
+                                                <div className="space-y-3 mb-6">
+                                                    {profile.wallets.map((wallet) => (
+                                                        <div key={wallet.id} className="flex items-center justify-between p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+                                                            <div className="flex items-center gap-3">
+                                                                <Wallet className="w-5 h-5 text-[var(--color-gold)]" />
+                                                                <code className="text-white font-mono text-sm">
+                                                                    {wallet.address.slice(0, 6)}...{wallet.address.slice(-4)}
+                                                                </code>
+                                                                {wallet.isPrimary && (
+                                                                    <span className="px-2 py-0.5 bg-[var(--color-gold)]/20 text-[var(--color-gold)] text-xs rounded">
+                                                                        Primary
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <div className="text-center py-8 text-zinc-500">
+                                                    No wallets linked yet.
+                                                </div>
+                                            )}
+
+                                            {isConnected && !isWalletLinked && (
+                                                <Button onClick={handleLinkWallet} disabled={isLinkingWallet}>
+                                                    {isLinkingWallet ? (
+                                                        <>
+                                                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                                            Linking...
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <Wallet className="w-4 h-4 mr-2" />
+                                                            Link Connected Wallet
+                                                        </>
+                                                    )}
+                                                </Button>
+                                            )}
                                         </div>
                                     </div>
                                 )}
@@ -144,33 +278,42 @@ export default function SettingsPage() {
                                     <div className="space-y-8">
                                         <div>
                                             <h2 className="text-xl font-light text-white mb-6 border-b border-zinc-800 pb-4">Current Plan</h2>
-                                            <div className="bg-zinc-900/50 border border-zinc-800 p-6 rounded-lg">
-                                                <div className="flex items-center justify-between mb-4">
-                                                    <div>
-                                                        <h3 className="text-2xl font-light text-white">Basic Evaluation</h3>
-                                                        <p className="text-zinc-500 text-sm">300 USDC • One-time Fee</p>
+                                            {profile?.subscription ? (
+                                                <div className="bg-zinc-900/50 border border-zinc-800 p-6 rounded-lg">
+                                                    <div className="flex items-center justify-between mb-4">
+                                                        <div>
+                                                            <h3 className="text-2xl font-light text-white">{profile.subscription.planName}</h3>
+                                                            <p className="text-zinc-500 text-sm">Started {new Date(profile.subscription.startedAt).toLocaleDateString()}</p>
+                                                        </div>
+                                                        <span className={`px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full border ${profile.subscription.status === 'active'
+                                                                ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
+                                                                : "bg-zinc-500/10 text-zinc-500 border-zinc-500/20"
+                                                            }`}>
+                                                            {profile.subscription.status}
+                                                        </span>
                                                     </div>
-                                                    <span className="px-3 py-1 bg-emerald-500/10 text-emerald-500 text-xs font-bold uppercase tracking-wider rounded-full border border-emerald-500/20">
-                                                        Active
-                                                    </span>
+                                                    {profile.subscription.txHash && (
+                                                        <div className="text-sm mb-4">
+                                                            <span className="text-zinc-400">Transaction: </span>
+                                                            <code className="text-zinc-300 font-mono">
+                                                                {profile.subscription.txHash.slice(0, 10)}...{profile.subscription.txHash.slice(-8)}
+                                                            </code>
+                                                        </div>
+                                                    )}
+                                                    <div className="flex gap-4">
+                                                        <Button onClick={() => router.push("/app/plans")} className="bg-[var(--color-gold)] text-black hover:bg-amber-400 border-none">
+                                                            Upgrade Tier
+                                                        </Button>
+                                                    </div>
                                                 </div>
-                                                <div className="space-y-2 mb-6">
-                                                    <div className="flex justify-between text-sm">
-                                                        <span className="text-zinc-400">Virtual Capital</span>
-                                                        <span className="text-white">$50,000</span>
-                                                    </div>
-                                                    <div className="flex justify-between text-sm">
-                                                        <span className="text-zinc-400">Status</span>
-                                                        <span className="text-white">Evaluation Phase 1</span>
-                                                    </div>
-                                                </div>
-                                                <div className="flex gap-4">
+                                            ) : (
+                                                <div className="text-center py-12 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+                                                    <p className="text-zinc-400 mb-4">No active subscription</p>
                                                     <Button onClick={() => router.push("/app/plans")} className="bg-[var(--color-gold)] text-black hover:bg-amber-400 border-none">
-                                                        Upgrade Tier
+                                                        View Plans
                                                     </Button>
-                                                    <Button variant="outline">View Contract</Button>
                                                 </div>
-                                            </div>
+                                            )}
                                         </div>
                                     </div>
                                 )}

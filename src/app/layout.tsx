@@ -27,7 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${inter.variable} ${pinyon.variable} ${winnerSans.variable} font-sans bg-[#050505] text-gray-200 antialiased selection:bg-white/20`}>
+      <body className={`${inter.variable} ${pinyon.variable} ${winnerSans.variable} font-sans bg-black text-gray-200 antialiased selection:bg-[var(--color-gold)]/30 selection:text-[var(--color-gold)]`}>
         <Providers>{children}</Providers>
       </body>
     </html>

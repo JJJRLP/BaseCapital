@@ -5,18 +5,41 @@
   --font-script: var(--font-pinyon), cursive;
   --font-winner: var(--font-winner), sans-serif;
 
-  --color-background: #050505;
-  --color-surface: #0a0a0a;
-  --color-border: #1f1f1f;
+  /* iOS 2016 / iOS 10 Inspired Palette (Dark Mode Base) */
+  --color-background: #000000;
+  --color-surface: rgba(28, 28, 30, 0.6); /* Translucent surface */
+  --color-surface-highlight: rgba(44, 44, 46, 0.6);
+  --color-border: rgba(58, 58, 60, 0.4);
+  
   --color-primary: #ffffff;
-  --color-secondary: #a1a1aa;
-  --color-accent: #d4d4d8;
-  --color-gold: #D4AF37;
+  --color-secondary: #8e8e93; /* System Gray */
+  --color-accent: #0a84ff; /* System Blue */
+  --color-gold: #D4AF37; /* Keeping Brand Gold */
+  
+  --color-success: #30d158;
+  --color-destruct: #ff453a;
+
+  --backdrop-blur-xl: 20px;
+  --backdrop-saturate: 180%;
 }
 
 /* Custom Utilities */
 @utility text-balance {
   text-wrap: balance;
+}
+
+@utility ios-glass {
+  background-color: var(--color-surface);
+  backdrop-filter: blur(var(--backdrop-blur-xl)) saturate(var(--backdrop-saturate));
+  -webkit-backdrop-filter: blur(var(--backdrop-blur-xl)) saturate(var(--backdrop-saturate));
+  border: 1px solid var(--color-border);
+}
+
+@utility ios-glass-highlight {
+  background-color: var(--color-surface-highlight);
+  backdrop-filter: blur(var(--backdrop-blur-xl)) saturate(var(--backdrop-saturate));
+  -webkit-backdrop-filter: blur(var(--backdrop-blur-xl)) saturate(var(--backdrop-saturate));
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 body {
@@ -25,6 +48,11 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Deep mesh gradient background for glass effects to react to */
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(20, 20, 30, 0.8) 0%, transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(30, 25, 20, 0.5) 0%, transparent 25%);
+  background-attachment: fixed;
 }
 
 h1,
@@ -34,25 +62,19 @@ h4,
 h5,
 h6 {
   color: var(--color-primary);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em; /* Tighter tracking for SF-like feel */
+  font-weight: 600;
 }
 
 .font-script {
   font-family: var(--font-script);
 }
 
+/* Animations */
 @keyframes shine {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-
-  100% {
-    background-position: 0% 50%;
-  }
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .text-gold-shine {
@@ -69,8 +91,11 @@ h6 {
   animation: shine 4s linear infinite;
 }
 
-@keyframes border-beam {
-  100% {
-    offset-distance: 100%;
-  }
+/* iOS-style Switch/Toggle or other micro-interactions can go here */
+.ios-press {
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s ease;
+}
+.ios-press:active {
+  transform: scale(0.96);
+  opacity: 0.8;
 }

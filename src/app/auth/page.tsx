@@ -6,16 +6,50 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Background } from "@/components/Background";
+import { useAuth } from "@/contexts/AuthContext";
+import { Loader2 } from "lucide-react";
 
 export default function AuthPage() {
     const [isLogin, setIsLogin] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<string | null>(null);
     const router = useRouter();
+    const { signIn, signUp } = useAuth();
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        password: "",
+    });
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // In a real app, we would handle auth here.
-        // For now, just redirect to the app.
-        router.push("/app");
+        setError(null);
+        setSuccess(null);
+        setIsSubmitting(true);
+
+        try {
+            if (isLogin) {
+                const result = await signIn(formData.email, formData.password);
+                if (result.error) {
+                    setError(result.error);
+                } else {
+                    router.push("/app");
+                }
+            } else {
+                const result = await signUp(formData.email, formData.password, formData.name);
+                if (result.error) {
+                    setError(result.error);
+                } else {
+                    setSuccess("Registration successful! Please check your email to verify your account.");
+                }
+            }
+        } catch {
+            setError("An unexpected error occurred. Please try again.");
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -40,12 +74,26 @@ export default function AuthPage() {
                         </p>
                     </div>
 
+                    {error && (
+                        <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 text-red-400 text-sm rounded">
+                            {error}
+                        </div>
+                    )}
+
+                    {success && (
+                        <div className="mb-6 p-4 bg-green-500/10 border border-green-500/20 text-green-400 text-sm rounded">
+                            {success}
+                        </div>
+                    )}
+
                     <form onSubmit={handleSubmit} className="space-y-6">
                         {!isLogin && (
                             <Input
                                 placeholder="Full Name"
                                 label="Name"
                                 type="text"
+                                value={formData.name}
+                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                 required
                             />
                         )}
@@ -53,23 +101,38 @@ export default function AuthPage() {
                             placeholder="name@example.com"
                             label="Email"
                             type="email"
+                            value={formData.email}
+                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                             required
                         />
                         <Input
                             placeholder="••••••••"
                             label="Password"
                             type="password"
+                            value={formData.password}
+                            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                             required
                         />
 
-                        <Button type="submit" className="w-full mt-4">
-                            {isLogin ? "Sign In" : "Create Account"}
+                        <Button type="submit" className="w-full mt-4" disabled={isSubmitting}>
+                            {isSubmitting ? (
+                                <>
+                                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                    {isLogin ? "Signing In..." : "Creating Account..."}
+                                </>
+                            ) : (
+                                isLogin ? "Sign In" : "Create Account"
+                            )}
                         </Button>
                     </form>
 
                     <div className="mt-8 text-center">
                         <button
-                            onClick={() => setIsLogin(!isLogin)}
+                            onClick={() => {
+                                setIsLogin(!isLogin);
+                                setError(null);
+                                setSuccess(null);
+                            }}
                             className="text-zinc-500 text-xs uppercase tracking-wider hover:text-white transition-colors"
                         >
                             {isLogin

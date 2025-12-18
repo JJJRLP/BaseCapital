@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String        @id @default(uuid())
+  email         String        @unique
+  displayName   String?
+  avatarUrl     String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  wallets       Wallet[]
+  subscription  Subscription?
+  traderProfile TraderProfile?
+}
+
+model Wallet {
+  id        String   @id @default(uuid())
+  address   String   @unique
+  isPrimary Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Subscription {
+  id        String    @id @default(uuid())
+  planId    String    // starter, professional, executive
+  planName  String
+  status    String    @default("active") // active, cancelled, expired
+  startedAt DateTime  @default(now())
+  expiresAt DateTime?
+  txHash    String?   // Blockchain transaction hash
+
+  userId    String    @unique
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model TraderProfile {
+  id              String   @id @default(uuid())
+  stage           String   @default("challenge") // challenge, verification, funded
+  initialBalance  Decimal
+  currentBalance  Decimal
+  tradingDays     Int      @default(0)
+  totalTrades     Int      @default(0)
+  status          String   @default("active") // active, passed, failed
+  startedAt       DateTime @default(now())
+
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

@@ -7,43 +7,49 @@ import { Button } from "@/components/ui/Button";
 
 export function Manifesto() {
     return (
-        <section className="py-12 md:py-24 bg-zinc-950 relative overflow-hidden">
-            {/* Background Elements */}
-            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[var(--color-gold)]/5 rounded-full blur-3xl" />
-                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-900/5 rounded-full blur-3xl" />
+        <section className="py-24 md:py-32 relative overflow-hidden">
+            {/* Dynamic Background */}
+            <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[var(--color-gold)]/10 rounded-full blur-[120px] mix-blend-screen" />
+                <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] mix-blend-screen" />
             </div>
 
-            <div className="container mx-auto px-4 relative z-10">
+            <div className="container mx-auto px-6 relative z-10">
                 <div className="max-w-4xl mx-auto text-center">
                     <motion.div
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="mb-12"
+                        transition={{ duration: 0.8, ease: "easeOut" }}
+                        className="mb-16"
                     >
-                        <h2 className="text-3xl md:text-5xl font-light text-white mb-6">
-                            The <span className="text-[var(--color-gold)] font-script">Manifesto</span>
+                        <h2 className="text-5xl md:text-7xl font-semibold text-white mb-8 tracking-tighter">
+                            The <span className="text-[var(--color-gold)] font-script font-thin">Manifesto</span>
                         </h2>
-                        <p className="text-zinc-400 text-lg font-light leading-relaxed max-w-2xl mx-auto mb-8">
-                            We believe in empowering traders with fair rules, transparent evaluation, and the capital they deserve.
-                            Our path to funding is designed to identify and reward consistent profitability.
-                        </p>
 
-                        <div className="flex flex-wrap justify-center gap-4 mb-12">
-                            <div className="flex items-center gap-2 text-zinc-300 bg-zinc-900/50 px-4 py-2 rounded-full border border-zinc-800">
-                                <TrendingUp className="w-4 h-4 text-[var(--color-gold)]" />
-                                <span className="text-sm">8% Profit Target</span>
+                        <div className="ios-glass p-10 md:p-14 rounded-[3rem] mb-12 shadow-2xl backdrop-blur-3xl">
+                            <p className="text-zinc-200 text-xl md:text-2xl font-medium leading-relaxed max-w-3xl mx-auto">
+                                "We believe in empowering traders with <span className="text-white font-bold">fair rules</span>, transparent evaluation, and the <span className="text-[var(--color-gold)]">capital they deserve</span>. Our path to funding is designed to identify and reward consistent profitability."
+                            </p>
+                        </div>
+
+                        <div className="flex flex-wrap justify-center gap-6 mb-16">
+                            <div className="flex items-center gap-3 text-white bg-white/10 px-6 py-3 rounded-full border border-white/10 backdrop-blur-md hover:bg-white/20 transition-colors">
+                                <TrendingUp className="w-5 h-5 text-[var(--color-gold)]" />
+                                <span className="text-lg font-medium">8% Profit Target</span>
                             </div>
-                            <div className="flex items-center gap-2 text-zinc-300 bg-zinc-900/50 px-4 py-2 rounded-full border border-zinc-800">
-                                <ShieldCheck className="w-4 h-4 text-[var(--color-gold)]" />
-                                <span className="text-sm">8% Max Drawdown</span>
+                            <div className="flex items-center gap-3 text-white bg-white/10 px-6 py-3 rounded-full border border-white/10 backdrop-blur-md hover:bg-white/20 transition-colors">
+                                <ShieldCheck className="w-5 h-5 text-[var(--color-gold)]" />
+                                <span className="text-lg font-medium">8% Max Drawdown</span>
                             </div>
                         </div>
 
                         <Link href="/manifesto">
-                            <Button variant="outline" className="border-zinc-700 hover:bg-zinc-900 text-white px-6 py-4 md:px-8 md:py-6 text-base group">
-                                Read Full Manifesto <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                            <Button
+                                variant="outline"
+                                className="border-white/10 bg-white/5 text-white px-10 py-6 text-lg rounded-2xl hover:bg-white hover:text-black transition-all duration-300 font-semibold group"
+                            >
+                                Read Full Manifesto <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                             </Button>
                         </Link>
                     </motion.div>

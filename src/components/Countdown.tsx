@@ -41,23 +41,25 @@ export function Countdown() {
     }, []);
 
     return (
-        <section className="py-8 md:py-20 px-6 border-y border-zinc-900/50 bg-zinc-900/10 backdrop-blur-sm">
-            <div className="container mx-auto max-w-4xl text-center">
-                <motion.h3
-                    initial={{ opacity: 0, y: 20 }}
+        <section className="py-12 md:py-24 px-6 relative z-10">
+            <div className="container mx-auto max-w-5xl text-center">
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="text-xs md:text-sm tracking-[0.3em] uppercase text-zinc-500 mb-8 md:mb-12"
+                    className="ios-glass rounded-[3rem] p-10 md:p-16 backdrop-blur-2xl shadow-2xl"
                 >
-                    {t.countdown.title}
-                </motion.h3>
+                    <h3 className="text-sm md:text-base font-bold tracking-[0.2em] uppercase text-zinc-400 mb-12">
+                        {t.countdown.title}
+                    </h3>
 
-                <div className="flex flex-wrap justify-center gap-4 sm:gap-8 md:gap-16">
-                    <TimeUnit value={timeLeft.days} label={t.countdown.days} />
-                    <TimeUnit value={timeLeft.hours} label={t.countdown.hours} />
-                    <TimeUnit value={timeLeft.minutes} label={t.countdown.minutes} />
-                    <TimeUnit value={timeLeft.seconds} label={t.countdown.seconds} />
-                </div>
+                    <div className="flex flex-wrap justify-center gap-6 sm:gap-10 md:gap-16">
+                        <TimeUnit value={timeLeft.days} label={t.countdown.days} />
+                        <TimeUnit value={timeLeft.hours} label={t.countdown.hours} />
+                        <TimeUnit value={timeLeft.minutes} label={t.countdown.minutes} />
+                        <TimeUnit value={timeLeft.seconds} label={t.countdown.seconds} />
+                    </div>
+                </motion.div>
             </div>
         </section>
     );
