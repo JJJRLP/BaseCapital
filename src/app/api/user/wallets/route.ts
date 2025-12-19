@@ -12,6 +12,14 @@ interface AddWalletBody {
 export async function GET() {
     try {
         const supabase = await createServerSupabaseClient();
+
+        if (!supabase) {
+            return NextResponse.json(
+                { error: 'Service temporarily unavailable' },
+                { status: 503 }
+            );
+        }
+
         const { data: { user: authUser } } = await supabase.auth.getUser();
 
         if (!authUser) {
@@ -40,6 +48,14 @@ export async function GET() {
 export async function POST(request: NextRequest) {
     try {
         const supabase = await createServerSupabaseClient();
+
+        if (!supabase) {
+            return NextResponse.json(
+                { error: 'Service temporarily unavailable' },
+                { status: 503 }
+            );
+        }
+
         const { data: { user: authUser } } = await supabase.auth.getUser();
 
         if (!authUser) {
@@ -102,6 +118,14 @@ export async function POST(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
     try {
         const supabase = await createServerSupabaseClient();
+
+        if (!supabase) {
+            return NextResponse.json(
+                { error: 'Service temporarily unavailable' },
+                { status: 503 }
+            );
+        }
+
         const { data: { user: authUser } } = await supabase.auth.getUser();
 
         if (!authUser) {

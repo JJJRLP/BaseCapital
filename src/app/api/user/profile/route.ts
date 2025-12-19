@@ -7,6 +7,14 @@ export const dynamic = 'force-dynamic';
 export async function GET() {
     try {
         const supabase = await createServerSupabaseClient();
+
+        if (!supabase) {
+            return NextResponse.json(
+                { error: 'Service temporarily unavailable' },
+                { status: 503 }
+            );
+        }
+
         const { data: { user: authUser } } = await supabase.auth.getUser();
 
         if (!authUser) {
@@ -51,6 +59,14 @@ interface UpdateProfileBody {
 export async function PATCH(request: NextRequest) {
     try {
         const supabase = await createServerSupabaseClient();
+
+        if (!supabase) {
+            return NextResponse.json(
+                { error: 'Service temporarily unavailable' },
+                { status: 503 }
+            );
+        }
+
         const { data: { user: authUser } } = await supabase.auth.getUser();
 
         if (!authUser) {

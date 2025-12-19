@@ -13,6 +13,14 @@ interface CreateSubscriptionBody {
 export async function GET() {
     try {
         const supabase = await createServerSupabaseClient();
+
+        if (!supabase) {
+            return NextResponse.json(
+                { error: 'Service temporarily unavailable' },
+                { status: 503 }
+            );
+        }
+
         const { data: { user: authUser } } = await supabase.auth.getUser();
 
         if (!authUser) {
@@ -40,6 +48,14 @@ export async function GET() {
 export async function POST(request: NextRequest) {
     try {
         const supabase = await createServerSupabaseClient();
+
+        if (!supabase) {
+            return NextResponse.json(
+                { error: 'Service temporarily unavailable' },
+                { status: 503 }
+            );
+        }
+
         const { data: { user: authUser } } = await supabase.auth.getUser();
 
         if (!authUser) {
@@ -97,6 +113,14 @@ interface UpdateSubscriptionBody {
 export async function PATCH(request: NextRequest) {
     try {
         const supabase = await createServerSupabaseClient();
+
+        if (!supabase) {
+            return NextResponse.json(
+                { error: 'Service temporarily unavailable' },
+                { status: 503 }
+            );
+        }
+
         const { data: { user: authUser } } = await supabase.auth.getUser();
 
         if (!authUser) {

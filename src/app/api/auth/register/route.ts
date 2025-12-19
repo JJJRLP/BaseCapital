@@ -24,6 +24,13 @@ export async function POST(request: NextRequest) {
 
         const supabase = await createServerSupabaseClient();
 
+        if (!supabase) {
+            return NextResponse.json(
+                { error: 'Service temporarily unavailable' },
+                { status: 503 }
+            );
+        }
+
         // Create user in Supabase Auth
         const { data: authData, error: authError } = await supabase.auth.signUp({
             email,
