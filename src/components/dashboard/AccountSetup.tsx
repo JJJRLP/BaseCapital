@@ -174,7 +174,15 @@ export function AccountSetup() {
     );
 }
 
-function MetricCard({ label, value, icon: Icon, subValue, active }: any) {
+interface MetricCardProps {
+    label: string;
+    value: string;
+    icon: React.ComponentType<{ className?: string }>;
+    subValue?: string;
+    active?: boolean;
+}
+
+function MetricCard({ label, value, icon: Icon, subValue, active }: MetricCardProps) {
     return (
         <div className={`p-5 rounded-2xl border ${active ? 'bg-blue-500/10 border-blue-500/20' : 'bg-white/5 border-white/5'}`}>
             <div className="flex items-center justify-between mb-3">
