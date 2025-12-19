@@ -9,6 +9,7 @@ import { NoSubscriptionState } from "@/components/dashboard/NoSubscriptionState"
 import { useState, useEffect } from "react";
 import { useAccount } from "wagmi";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
 
 const sidebarItems = [
     { icon: LayoutDashboard, label: "Overview", href: "/app" },
@@ -21,8 +22,15 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const router = useRouter();
     const { isConnected } = useAccount();
+    const { profile, isLoading: isAuthLoading } = useAuth(); // Use AuthContext
     const [hasPlan, setHasPlan] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        if (!isAuthLoading && profile?.status === "PENDING") {
+            router.replace("/waitlist");
+        }
+    }, [profile, isAuthLoading, router]);
 
     useEffect(() => {
         // Check local storage for plan
@@ -38,6 +46,10 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
     const handleViewPlans = () => {
         router.push("/app/plans");
     };
+
+    if (isAuthLoading || (profile?.status === "PENDING")) {
+        return null; // Don't render dashboard while checking or redirecting
+    }
 
     return (
         <div className="flex min-h-screen bg-[#050505] text-white">

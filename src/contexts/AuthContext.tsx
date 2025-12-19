@@ -9,6 +9,7 @@ interface UserProfile {
     email: string;
     displayName: string | null;
     avatarUrl: string | null;
+    status: 'PENDING' | 'APPROVED' | 'REJECTED';
     wallets: Array<{
         id: string;
         address: string;
