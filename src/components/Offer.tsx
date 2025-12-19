@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { useLanguage } from "@/contexts/LanguageContext";
+import Link from "next/link";
 
 
 
@@ -25,9 +26,11 @@ export function Offer() {
                         <p className="text-zinc-400 text-lg font-light mb-10 leading-relaxed">
                             {t.offer.description}
                         </p>
-                        <Button size="lg" className="w-full md:w-auto">
-                            {t.offer.cta}
-                        </Button>
+                        <Link href="/auth" className="block w-full md:w-auto">
+                            <Button size="lg" className="w-full">
+                                {t.offer.cta}
+                            </Button>
+                        </Link>
                     </motion.div>
 
                     <div className="md:w-2/3 w-full grid gap-6">

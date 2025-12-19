@@ -73,12 +73,12 @@ const translations: Record<Language, Translations> = {
             title_suffix: "Offer",
             description:
                 "We provide the capital. You provide the edge. Our infrastructure is built for professionals who demand precision.",
-            cta: "Apply for Evaluation",
+            cta: "Join Waitlist",
             items: [
                 {
-                    title: "Evaluation Model",
+                    title: "Priority Access",
                     description:
-                        "A simple, subscription-based assessment to prove your skills. Pass the benchmark, get funded. No hidden rules.",
+                        "Limited spots available for the next cohort. Secure your position in the line for capital allocation.",
                 },
                 {
                     title: "Instant USDC Payouts",

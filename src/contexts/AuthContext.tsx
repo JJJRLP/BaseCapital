@@ -42,6 +42,9 @@ interface AuthContextType {
     isLoading: boolean;
     isAuthenticated: boolean;
     signUp: (email: string, password: string, displayName?: string) => Promise<{ error?: string }>;
+    applyForWaitlist: (email: string, name: string) => Promise<{ error?: string }>;
+    loginWithMagicLink: (email: string) => Promise<{ error?: string }>;
+    signIn: (email: string, password: string) => Promise<{ error?: string }>;
     signIn: (email: string, password: string) => Promise<{ error?: string }>;
     signOut: () => Promise<void>;
     refreshProfile: () => Promise<void>;
@@ -120,6 +123,49 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             return {};
         } catch (error) {
             console.error('Sign up error:', error);
+            return { error: 'An unexpected error occurred' };
+        }
+    };
+
+    const applyForWaitlist = async (email: string, name: string) => {
+        try {
+            const response = await fetch('/api/auth/apply', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, name }),
+            });
+
+            const data = await response.json();
+            if (!response.ok) {
+                return { error: data.error };
+            }
+
+            return {};
+        } catch (error) {
+            console.error('Apply error:', error);
+            return { error: 'An unexpected error occurred' };
+        }
+    };
+
+    const loginWithMagicLink = async (email: string) => {
+        try {
+            if (!supabase) {
+                return { error: 'Service temporarily unavailable' };
+            }
+            const { error } = await supabase.auth.signInWithOtp({
+                email,
+                options: {
+                    emailRedirectTo: `${window.location.origin}/auth/callback`,
+                    shouldCreateUser: false, // For login, we expect usage
+                },
+            });
+
+            if (error) {
+                return { error: error.message };
+            }
+            return {};
+        } catch (error) {
+            console.error('Magic link login error:', error);
             return { error: 'An unexpected error occurred' };
         }
     };
@@ -206,6 +252,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 isLoading,
                 isAuthenticated: !!user,
                 signUp,
+                applyForWaitlist,
+                loginWithMagicLink,
                 signIn,
                 signOut,
                 refreshProfile,

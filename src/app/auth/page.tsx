@@ -1,21 +1,23 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Background } from "@/components/Background";
 import { useAuth } from "@/contexts/AuthContext";
-import { Loader2 } from "lucide-react";
+import { Loader2, ArrowRight, Sparkles, Mail } from "lucide-react";
+import { AuthCard } from "@/components/auth/AuthCard";
 
 export default function AuthPage() {
     const [isLogin, setIsLogin] = useState(false);
+    const [useMagicLink, setUseMagicLink] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
     const router = useRouter();
-    const { signIn, signUp } = useAuth();
+    const { signIn, applyForWaitlist, loginWithMagicLink } = useAuth();
 
     const [formData, setFormData] = useState({
         name: "",
@@ -31,18 +33,30 @@ export default function AuthPage() {
 
         try {
             if (isLogin) {
-                const result = await signIn(formData.email, formData.password);
-                if (result.error) {
-                    setError(result.error);
+                if (useMagicLink) {
+                    // Magic Link Login
+                    const result = await loginWithMagicLink(formData.email);
+                    if (result.error) {
+                        setError(result.error);
+                    } else {
+                        setSuccess("Check your email for the login link.");
+                    }
                 } else {
-                    router.push("/app");
+                    // Password Login
+                    const result = await signIn(formData.email, formData.password);
+                    if (result.error) {
+                        setError(result.error);
+                    } else {
+                        router.push("/app");
+                    }
                 }
             } else {
-                const result = await signUp(formData.email, formData.password, formData.name);
+                // Apply for Waitlist (Magic Link)
+                const result = await applyForWaitlist(formData.email, formData.name);
                 if (result.error) {
                     setError(result.error);
                 } else {
-                    setSuccess("Registration successful! Please check your email to verify your account.");
+                    setSuccess("Application received. Check your email to verify and access the portal.");
                 }
             }
         } catch {
@@ -53,95 +67,173 @@ export default function AuthPage() {
     };
 
     return (
-        <main className="flex min-h-screen flex-col items-center justify-center bg-[#050505] relative overflow-hidden px-6">
+        <main className="min-h-screen bg-[#050505] relative overflow-hidden flex lg:items-center justify-center p-4 lg:p-0">
             <Background />
+            <FooterLink />
 
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-                className="w-full max-w-md relative z-10"
-            >
-                <div className="bg-zinc-950/50 backdrop-blur-xl border border-zinc-800 p-8 md:p-12 shadow-2xl">
-                    <div className="text-center mb-10">
-                        <h1 className="text-3xl font-light text-white mb-2">
-                            {isLogin ? "Welcome Back" : "Start Your Journey"}
+            <div className="w-full max-w-[1000px] grid lg:grid-cols-2 gap-12 lg:gap-20 items-center relative z-10">
+
+                {/* Visual Side (Hidden on Mobile) */}
+                <motion.div
+                    initial={{ opacity: 0, x: -50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
+                    className="hidden lg:flex justify-center"
+                >
+                    <AuthCard />
+                </motion.div>
+
+                {/* Form Side */}
+                <motion.div
+                    initial={{ opacity: 0, x: 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.8, delay: 0.2 }}
+                    className="w-full max-w-[420px] mx-auto lg:mx-0"
+                >
+                    <div className="mb-10">
+                        <motion.div
+                            key={isLogin ? "login" : "register"}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="bg-white/5 border border-white/10 rounded-full px-4 py-1.5 w-fit text-xs font-medium text-zinc-400 mb-6 backdrop-blur-sm"
+                        >
+                            {isLogin ? "Member Access" : "Waitlist Application"}
+                        </motion.div>
+
+                        <h1 className="text-4xl lg:text-5xl font-light text-white mb-4 tracking-tight">
+                            {isLogin ? "Welcome" : "Secure Your"} <br />
+                            <span className="font-script text-[#D4AF37] text-5xl lg:text-6xl">
+                                {isLogin ? "Back" : "Legacy"}
+                            </span>
                         </h1>
-                        <p className="text-zinc-500 text-sm">
+                        <p className="text-zinc-500 text-lg">
                             {isLogin
-                                ? "Enter your credentials to access your account"
-                                : "Join the elite trading firm today"}
+                                ? "Access your trading dashboard."
+                                : "Join the queue for capital allocation."}
                         </p>
                     </div>
 
-                    {error && (
-                        <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 text-red-400 text-sm rounded">
-                            {error}
-                        </div>
-                    )}
+                    <form onSubmit={handleSubmit} className="space-y-5">
+                        <AnimatePresence mode="popLayout">
+                            {!isLogin && (
+                                <motion.div
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: "auto" }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    className="overflow-hidden"
+                                >
+                                    <Input
+                                        placeholder="Full Name"
+                                        label="Legal Name"
+                                        type="text"
+                                        value={formData.name}
+                                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                        required={!isLogin}
+                                        className="bg-zinc-900/50 border-zinc-800 focus:border-[#D4AF37]/50"
+                                    />
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
 
-                    {success && (
-                        <div className="mb-6 p-4 bg-green-500/10 border border-green-500/20 text-green-400 text-sm rounded">
-                            {success}
-                        </div>
-                    )}
-
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        {!isLogin && (
-                            <Input
-                                placeholder="Full Name"
-                                label="Name"
-                                type="text"
-                                value={formData.name}
-                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                required
-                            />
-                        )}
                         <Input
                             placeholder="name@example.com"
-                            label="Email"
+                            label="Email Address"
                             type="email"
                             value={formData.email}
                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                             required
-                        />
-                        <Input
-                            placeholder="••••••••"
-                            label="Password"
-                            type="password"
-                            value={formData.password}
-                            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                            required
+                            className="bg-zinc-900/50 border-zinc-800 focus:border-[#D4AF37]/50"
                         />
 
-                        <Button type="submit" className="w-full mt-4" disabled={isSubmitting}>
+                        <AnimatePresence mode="popLayout">
+                            {isLogin && !useMagicLink && (
+                                <motion.div
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: "auto" }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    className="overflow-hidden space-y-1"
+                                >
+                                    <Input
+                                        placeholder="••••••••"
+                                        label="Password"
+                                        type="password"
+                                        value={formData.password}
+                                        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                                        required={!useMagicLink}
+                                        className="bg-zinc-900/50 border-zinc-800 focus:border-[#D4AF37]/50"
+                                    />
+                                    <div className="text-right">
+                                        <button type="button" className="text-xs text-zinc-500 hover:text-white transition-colors">Forgot Password?</button>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+
+                        {isLogin && (
+                            <div className="flex justify-end">
+                                <button
+                                    type="button"
+                                    onClick={() => setUseMagicLink(!useMagicLink)}
+                                    className="text-xs text-[#D4AF37] hover:text-[#b5952f] flex items-center gap-1 transition-colors"
+                                >
+                                    {useMagicLink ? "Use Password" : "Sign in with Magic Link"} <Sparkles className="w-3 h-3" />
+                                </button>
+                            </div>
+                        )}
+
+                        {(error || success) && (
+                            <motion.div
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className={`p-4 rounded-lg text-sm border ${error ? 'bg-red-500/10 border-red-500/20 text-red-400' : 'bg-green-500/10 border-green-500/20 text-green-400'}`}
+                            >
+                                {error || success}
+                            </motion.div>
+                        )}
+
+                        <Button
+                            type="submit"
+                            className="w-full text-base py-6 bg-[#D4AF37] hover:bg-[#b5952f] text-black font-medium"
+                            disabled={isSubmitting}
+                        >
                             {isSubmitting ? (
-                                <>
-                                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                                    {isLogin ? "Signing In..." : "Creating Account..."}
-                                </>
+                                <Loader2 className="w-5 h-5 animate-spin mx-auto" />
                             ) : (
-                                isLogin ? "Sign In" : "Create Account"
+                                <span className="flex items-center justify-center gap-2">
+                                    {isLogin
+                                        ? (useMagicLink ? "Send Login Link" : "Enter Portal")
+                                        : "Secure Your Spot"}
+                                    {useMagicLink || !isLogin ? <Mail className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
+                                </span>
                             )}
                         </Button>
                     </form>
 
-                    <div className="mt-8 text-center">
+                    <div className="mt-8 pt-8 border-t border-white/5 text-center">
+                        <p className="text-zinc-600 text-sm mb-3">
+                            {isLogin ? "Not on the list yet?" : "Already verified?"}
+                        </p>
                         <button
                             onClick={() => {
                                 setIsLogin(!isLogin);
+                                setUseMagicLink(false);
                                 setError(null);
                                 setSuccess(null);
                             }}
-                            className="text-zinc-500 text-xs uppercase tracking-wider hover:text-white transition-colors"
+                            className="text-white text-sm font-medium hover:text-[#D4AF37] transition-colors uppercase tracking-wider"
                         >
-                            {isLogin
-                                ? "Don't have an account? Sign Up"
-                                : "Already have an account? Sign In"}
+                            {isLogin ? "Apply for Access" : "Member Login"}
                         </button>
                     </div>
-                </div>
-            </motion.div>
+                </motion.div>
+            </div>
         </main>
+    );
+}
+function FooterLink() {
+    return (
+        <a href="https://skylos.solutions" target="_blank" rel="noopener noreferrer" className="absolute bottom-6 left-6 text-zinc-800 text-xs font-mono uppercase tracking-widest hover:text-zinc-600 transition-colors z-20">
+            POWERED BY SKYLOS
+        </a>
     );
 }

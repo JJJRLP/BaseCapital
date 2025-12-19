@@ -2,10 +2,12 @@
 
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
-import { Button } from "@/components/ui/Button";
-import { LogOut, ExternalLink, MessageSquare, Twitter } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { Background } from "@/components/Background";
+import { WaitlistCard } from "@/components/waitlist/WaitlistCard";
+import { QueueCounter } from "@/components/waitlist/QueueCounter";
+import { ReferralZone } from "@/components/waitlist/ReferralZone";
+import { LogOut, ArrowRight, Disc } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function WaitlistDashboard() {
     const { profile, signOut } = useAuth();
@@ -17,85 +19,95 @@ export default function WaitlistDashboard() {
     };
 
     return (
-        <main className="min-h-screen bg-[#050505] relative overflow-hidden flex items-center justify-center p-6">
+        <main className="min-h-screen bg-[#050505] relative overflow-hidden flex flex-col lg:flex-row text-balance">
             <Background />
 
-            <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-                className="relative z-10 w-full max-w-2xl"
-            >
-                <div className="bg-zinc-950/50 backdrop-blur-xl border border-zinc-800 rounded-3xl p-8 md:p-12 shadow-2xl overflow-hidden relative">
-                    {/* Decorative glow */}
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-1 bg-[var(--color-gold)]/50 blur-[2px]" />
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-20 bg-[var(--color-gold)]/10 blur-[40px] rounded-full pointing-down" />
+            {/* Mobile Header / Brand */}
+            <div className="lg:hidden absolute top-6 left-6 z-50">
+                <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-zinc-800 rounded-full animate-pulse" />
+                    <span className="font-winner text-xl text-white tracking-widest">BASE CAPITAL</span>
+                </div>
+            </div>
 
-                    <div className="text-center mb-10">
-                        <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.2 }}
-                            className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 text-sm font-medium mb-6"
-                        >
-                            <span className="w-2 h-2 rounded-full bg-yellow-500 mr-2 animate-pulse" />
-                            Status: Pending Approval
-                        </motion.div>
+            {/* Left Panel - Hero & Card */}
+            <section className="flex-1 relative z-10 flex flex-col items-center justify-center p-6 lg:p-20 min-h-[60vh] lg:min-h-screen">
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
+                    className="w-full max-w-lg space-y-12"
+                >
+                    <div className="space-y-4 text-center lg:text-left">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-4">
+                            <span className="relative flex h-2 w-2">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#D4AF37] opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#D4AF37]"></span>
+                            </span>
+                            <span className="text-xs font-medium text-zinc-300 uppercase tracking-wider">Status: Pending</span>
+                        </div>
 
-                        <h1 className="text-3xl md:text-5xl font-light text-white mb-4 tracking-tight">
-                            Application <span className="font-script text-[var(--color-gold)]">Received</span>
+                        <h1 className="text-4xl md:text-6xl font-light text-white tracking-tight leading-[1.1]">
+                            Welcome to the <br />
+                            <span className="font-script text-[#D4AF37] text-5xl md:text-7xl">Inner Circle</span>
                         </h1>
-                        <p className="text-zinc-400 text-lg leading-relaxed max-w-lg mx-auto">
-                            Welcome, <span className="text-white font-medium">{profile?.displayName}</span>.
-                            You are now on the whitelist. We review trader applications on a rolling basis to ensure the highest quality of our capital partners.
+                        <p className="text-zinc-400 text-lg max-w-md mx-auto lg:mx-0 font-light">
+                            Your application is currently under review by our risk committee. We are processing batch <span className="text-white font-medium">#42</span>.
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
-                        <a
-                            href="https://discord.gg/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="group p-5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all flex items-center gap-4"
-                        >
-                            <div className="w-10 h-10 rounded-full bg-[#5865F2]/20 flex items-center justify-center text-[#5865F2]">
-                                <MessageSquare className="w-5 h-5" />
-                            </div>
-                            <div className="text-left">
-                                <h3 className="text-white font-medium group-hover:text-[var(--color-gold)] transition-colors">Join Discord</h3>
-                                <p className="text-zinc-500 text-sm">Meet other traders</p>
-                            </div>
-                            <ExternalLink className="w-4 h-4 text-zinc-600 ml-auto group-hover:text-white transition-colors" />
-                        </a>
-
-                        <a
-                            href="https://warpcast.com/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="group p-5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all flex items-center gap-4"
-                        >
-                            <div className="w-10 h-10 rounded-full bg-[#855DCD]/20 flex items-center justify-center text-[#855DCD]">
-                                <Twitter className="w-5 h-5" />
-                            </div>
-                            <div className="text-left">
-                                <h3 className="text-white font-medium group-hover:text-[var(--color-gold)] transition-colors">Follow Updates</h3>
-                                <p className="text-zinc-500 text-sm">On Farcaster</p>
-                            </div>
-                            <ExternalLink className="w-4 h-4 text-zinc-600 ml-auto group-hover:text-white transition-colors" />
-                        </a>
+                    <div className="relative group perspective-1000">
+                        <div className="absolute -inset-4 bg-gradient-to-r from-[#D4AF37]/20 to-purple-500/20 rounded-[2rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                        <WaitlistCard
+                            name={profile?.displayName || "Trader"}
+                            email={profile?.email || ""}
+                        />
                     </div>
 
-                    <div className="text-center pt-8 border-t border-zinc-900">
+                    <div className="hidden lg:flex items-center gap-6 pt-4">
                         <button
                             onClick={handleSignOut}
-                            className="text-zinc-500 hover:text-white text-sm flex items-center justify-center gap-2 mx-auto transition-colors"
+                            className="text-sm font-medium text-zinc-500 hover:text-white transition-colors flex items-center gap-2 group"
                         >
-                            <LogOut className="w-4 h-4" />
-                            Sign Out
+                            <LogOut className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" /> Sign Out
                         </button>
                     </div>
+                </motion.div>
+                <div className="absolute bottom-6 left-6 text-zinc-800 text-xs font-mono uppercase tracking-widest">
+                    BASE CAPITAL /// EST. 2025
                 </div>
-            </motion.div>
+            </section>
+
+            {/* Right Panel - Stats & Actions */}
+            <section className="relative z-10 lg:w-[480px] bg-zinc-950/30 backdrop-blur-3xl border-t lg:border-t-0 lg:border-l border-white/5 p-6 lg:p-12 flex flex-col justify-center">
+                {/* Decorative top fade for mobile */}
+                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent lg:hidden" />
+
+                <div className="w-full max-w-md mx-auto space-y-12">
+                    <QueueCounter position={4821} />
+
+                    <div className="space-y-8">
+                        <ReferralZone referralCode="SKH-VIP" />
+
+                        <div className="h-px bg-white/5" />
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <a href="https://discord.gg/" target="_blank" className="p-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 transition-all text-center group">
+                                <Disc className="w-6 h-6 text-[#5865F2] mx-auto mb-2 group-hover:scale-110 transition-transform" />
+                                <span className="text-xs text-zinc-400 font-medium">Join Discord</span>
+                            </a>
+                            <a href="#" className="p-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 transition-all text-center group">
+                                <div className="w-6 h-6 mx-auto mb-2 text-white flex items-center justify-center font-bold text-lg group-hover:scale-110 transition-transform">X</div>
+                                <span className="text-xs text-zinc-400 font-medium">Follow</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div className="lg:hidden text-center pt-8">
+                        <button onClick={handleSignOut} className="text-sm text-zinc-500">Sign Out</button>
+                    </div>
+                </div>
+            </section>
         </main>
     );
 }

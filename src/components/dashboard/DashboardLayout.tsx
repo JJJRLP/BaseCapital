@@ -34,7 +34,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         // Check local storage for plan
-        const savedPlan = localStorage.getItem("skylos_plan");
+        const savedPlan = localStorage.getItem("base_capital_plan");
         if (savedPlan) {
             setHasPlan(true);
         }
@@ -57,7 +57,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
             <aside className="w-64 border-r border-zinc-900 hidden md:flex flex-col">
                 <div className="p-6 border-b border-zinc-900">
                     <Link href="/" className="text-2xl font-light tracking-tighter">
-                        Skylos <span className="text-[var(--color-gold)] font-script text-3xl">Capital</span>
+                        Base <span className="text-[var(--color-gold)] font-script text-3xl">Capital</span>
                     </Link>
                 </div>
 
@@ -94,7 +94,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
                 <header className="h-16 border-b border-zinc-900 flex items-center justify-between px-6 bg-[#050505]/50 backdrop-blur-sm sticky top-0 z-50">
                     <div className="md:hidden">
                         {/* Mobile Menu Trigger would go here */}
-                        <span className="font-script text-[var(--color-gold)] text-2xl">Skylos</span>
+                        <span className="font-script text-[var(--color-gold)] text-2xl">Base Capital</span>
                     </div>
                     <div className="ml-auto">
                         <WalletConnect />
