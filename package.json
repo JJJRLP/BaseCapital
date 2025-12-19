@@ -2,6 +2,26 @@
   "name": "base-capital",
   "version": "0.1.0",
   "private": true,
+  "author": {
+    "name": "Skylos",
+    "email": "agency@skylos.solutions",
+    "url": "https://skylos.solutions"
+  },
+  "contributors": [
+    {
+      "name": "Jhonny R. Lopez Pommier",
+      "email": "agency@skylos.solutions",
+      "url": "https://skylos.solutions"
+    },
+    {
+      "name": "Andres Barriga"
+    }
+  ],
+  "homepage": "https://skylos.solutions",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/skylos/base-capital"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",

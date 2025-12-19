@@ -107,3 +107,21 @@ Contributions are what make the open source community such an amazing place to l
 3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
+
+See [CONTRIBUTORS.md](./CONTRIBUTORS.md) for the full list of contributors.
+
+---
+
+## 👥 Ownership & Development
+
+**Base Capital** is developed and maintained by **[Skylos](https://skylos.solutions)** - a Custom AI Solutions and Blockchain Development Agency.
+
+### Core Contributors
+
+| Name | Role | Contact |
+|------|------|---------|
+| Jhonny R. Lopez Pommier | COO & Business Strategist | [Skylos](https://skylos.solutions) |
+| Andres Barriga | Contributor | - |
+
+For business inquiries: [agency@skylos.solutions](mailto:agency@skylos.solutions)
+
