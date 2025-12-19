@@ -1,9 +1,11 @@
 // Prisma client with lazy dynamic import
 // This prevents build-time connection attempts in Next.js
 
-let prismaInstance: Awaited<typeof import('@prisma/client')>['PrismaClient'] extends new () => infer T ? T : never;
+import type { PrismaClient as PrismaClientType } from '@prisma/client';
 
-export async function getPrisma() {
+let prismaInstance: PrismaClientType | null = null;
+
+export async function getPrisma(): Promise<PrismaClientType> {
     if (!prismaInstance) {
         const { PrismaClient } = await import('@prisma/client');
         prismaInstance = new PrismaClient();
@@ -11,5 +13,5 @@ export async function getPrisma() {
     return prismaInstance;
 }
 
-// Type for the prisma instance
-export type PrismaClientType = NonNullable<typeof prismaInstance>;
+// Re-export the type for external use
+export type { PrismaClientType };

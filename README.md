@@ -1,4 +1,4 @@
-# Base Capital
+# Base Capital 12/18/2025
 
 **On-chain prop trading infrastructure built on Base.**
 
@@ -6,7 +6,7 @@
 
 Base Capital is a decentralized proprietary trading firm that enables traders to access firm capital through smart contract-enforced risk management. Built natively on Base with USDC accounting.
 
-The BAse Capital Manifesto will 
+The BAse Capital Manifesto will on following days after some reviews are done to the document;
 ## Tech Stack
 
 - **Frontend**: Next.js 15, TypeScript, React 19
