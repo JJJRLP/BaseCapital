@@ -61,7 +61,6 @@ export async function POST(request: NextRequest) {
                 id: authData.user.id,
                 email: authData.user.email!,
                 displayName: displayName || email.split('@')[0],
-                status: 'PENDING',
             },
         });
 

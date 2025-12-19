@@ -65,6 +65,25 @@ export function ProgramDetails() {
                     </motion.p>
                 </div>
 
+                {/* App Screenshot Showcase */}
+                <motion.div
+                    initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, delay: 0.2 }}
+                    className="relative mb-20 md:mb-32 rounded-xl overflow-hidden shadow-2xl border border-zinc-800 group"
+                >
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent z-10 opacity-60" />
+                    <img
+                        src="/app-screenshot.png"
+                        alt="Skylos Capital Trading Dashboard"
+                        className="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
+                    />
+                    <div className="absolute inset-x-0 bottom-0 p-8 z-20 text-center">
+                        <p className="text-white/80 font-light text-sm tracking-widest uppercase">Professional Grade Interface</p>
+                    </div>
+                </motion.div>
+
                 <div className="grid md:grid-cols-2 gap-10 md:gap-16">
                     {/* Benefits Column */}
                     <div>

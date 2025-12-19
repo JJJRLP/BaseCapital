@@ -6,7 +6,6 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
-import { WalletConnect } from "@/components/WalletConnect";
 
 export function Hero() {
     const { t } = useLanguage();
@@ -16,9 +15,6 @@ export function Hero() {
 
     return (
         <section className="relative min-h-[100dvh] w-full overflow-hidden flex items-center justify-center py-12 md:py-0">
-            <div className="absolute top-6 left-6 md:top-10 md:left-10 z-50">
-                <WalletConnect />
-            </div>
             <LanguageSwitcher className="absolute top-6 right-6 md:top-10 md:right-10" />
             {/* Background Elements */}
             <div className="absolute inset-0 z-0">

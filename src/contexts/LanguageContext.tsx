@@ -57,7 +57,7 @@ const translations: Record<Language, Translations> = {
             title_suffix: "1% of Traders",
             description:
                 "Prove your edge with raw spreads, zero slippage, and deep institutional liquidity.",
-            cta_primary: "Request Access",
+            cta_primary: "Join Waitlist",
             cta_secondary: "View Parameters",
             scroll: "Scroll",
         },
