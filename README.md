@@ -114,13 +114,13 @@ See [CONTRIBUTORS.md](./CONTRIBUTORS.md) for the full list of contributors.
 
 ## 👥 Ownership & Development
 
-**Base Capital** is developed and maintained by **[Skylos](https://skylos.solutions)** - a Custom AI Solutions and Blockchain Development Agency.
+**Base Capital** is developed and maintained by [Jhonny R. Lopez from Skylos](https://skylos.solutions)** - a Custom AI Solutions and Blockchain Development Agency.
 
 ### Core Contributors
 
 | Name | Role | Contact |
 |------|------|---------|
-| Jhonny R. Lopez Pommier | COO & Business Strategist | [Skylos](https://skylos.solutions) |
+| Jhonny R. Lopez Pommier | COO & Business Strategist | [Skylos](https://skylos.solutions) (jhonny.r.lopz@gmail.com) |
 | Andres Barriga | Contributor | - |
 
 For business inquiries: [agency@skylos.solutions](mailto:agency@skylos.solutions)

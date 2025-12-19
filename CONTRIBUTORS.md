@@ -10,7 +10,7 @@ This project is developed and maintained by **Skylos** (https://skylos.solutions
 - **Role**: Chief Operating Officer (COO) & Business Strategist
 - **Organization**: Skylos
 - **Website**: https://skylos.solutions
-- **Contact**: agency@skylos.solutions
+- **Contact**: jhonny.r.lopz@gmail.com
 
 ### Andres Barriga
 - **Role**: Contributor
@@ -22,7 +22,7 @@ This project is developed and maintained by **Skylos** (https://skylos.solutions
 
 ### Skylos
 - **Website**: https://skylos.solutions
-- **Founded**: 2023
+- **Founded**: 2025
 - **Contact**: agency@skylos.solutions
 - **LinkedIn**: https://www.linkedin.com/company/skylos-ai
 
