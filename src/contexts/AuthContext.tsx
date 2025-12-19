@@ -45,7 +45,6 @@ interface AuthContextType {
     applyForWaitlist: (email: string, name: string) => Promise<{ error?: string }>;
     loginWithMagicLink: (email: string) => Promise<{ error?: string }>;
     signIn: (email: string, password: string) => Promise<{ error?: string }>;
-    signIn: (email: string, password: string) => Promise<{ error?: string }>;
     signOut: () => Promise<void>;
     refreshProfile: () => Promise<void>;
     linkWallet: (address: string, isPrimary?: boolean) => Promise<{ error?: string }>;
