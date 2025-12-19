@@ -25,7 +25,7 @@ export async function GET() {
         }
 
         const prisma = await getPrisma();
-        const user = await prisma.user.findUnique({
+        let user = await prisma.user.findUnique({
             where: { id: authUser.id },
             include: {
                 wallets: true,
@@ -35,10 +35,21 @@ export async function GET() {
         });
 
         if (!user) {
-            return NextResponse.json(
-                { error: 'User not found' },
-                { status: 404 }
-            );
+            // Auto-create user from Supabase metadata (for Magic Link users)
+            const displayName = authUser.user_metadata?.display_name || authUser.email?.split('@')[0] || 'Trader';
+            user = await prisma.user.create({
+                data: {
+                    id: authUser.id,
+                    email: authUser.email!,
+                    displayName,
+                    // status defaults to PENDING in schema
+                },
+                include: {
+                    wallets: true,
+                    subscription: true,
+                    traderProfile: true,
+                },
+            });
         }
 
         return NextResponse.json({ user });
