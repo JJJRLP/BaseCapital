@@ -8,7 +8,7 @@
 
 Base Capital democratizes access to trading capital. We provide an infrastructure where traders can prove their skills and access firm capital through smart contract-enforced risk management. No banking friction, instant USDC payouts, and completely transparent on-chain execution.
 
-## 🚀 Key Features
+## Key Features
 
 - **Instant USDC Payouts**: 80/20 profit split settled automatically on-chain.
 - **Smart Wallet Integration**: Seamless login with Coinbase Smart Wallet (Passkeys) - no seed phrases required.
@@ -16,14 +16,14 @@ Base Capital democratizes access to trading capital. We provide an infrastructur
 - **Capital Isolation**: Each funded trader operates through a dedicated `TraderAccount.sol` smart wallet.
 - **Whitelisted DeFi Trading**: Execute trades on premier DEXs like Aerodrome and Uniswap directly.
 
-## 🛠 Tech Stack
+## Tech Stack
 
 - **Frontend**: Next.js 15 (App Router), React 19, TypeScript, TailwindCSS
 - **Blockchain**: Base (L2), Solidity, Foundry
 - **Connectors**: OnchainKit, Wagmi, Viem
 - **Backend/DB**: Supabase (PostgreSQL), Prisma ORM
 
-## 🏁 Getting Started
+## Getting Started
 
 Follow these steps to set up the project locally for development.
 
@@ -60,7 +60,7 @@ Follow these steps to set up the project locally for development.
    ```
    Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## 🌊 Usage Flows
+## Usage Flows
 
 ### For Traders
 
@@ -82,7 +82,7 @@ Follow these steps to set up the project locally for development.
     - Update schema: `npx prisma db push`
     - Generate client: `npx prisma generate`
 
-## 🔐 Security
+## Security
 
 Security is our top priority. Our architecture minimizes trust assumptions:
 
@@ -94,11 +94,11 @@ For full details on our security model and how to report vulnerabilities, please
 
 > **Note**: This codebase currently includes a standard MIT License. Usage of the software is at your own risk.
 
-## 📄 License
+## License
 
 Distributed under the MIT License. See [LICENSE](./LICENSE) for more information.
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
@@ -112,7 +112,7 @@ See [CONTRIBUTORS.md](./CONTRIBUTORS.md) for the full list of contributors.
 
 ---
 
-## 👥 Ownership & Development
+## Ownership & Development
 
 **Base Capital** is developed and maintained by [Jhonny R. Lopez from Skylos](https://skylos.solutions)** - a Custom AI Solutions and Blockchain Development Agency.
 
