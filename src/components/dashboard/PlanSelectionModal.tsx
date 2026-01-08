@@ -13,7 +13,7 @@ import {
     TransactionStatusAction,
 } from "@coinbase/onchainkit/transaction";
 import { encodeFunctionData } from "viem";
-import { CONTRACTS, ACTIVE_CHAIN_ID } from "@/lib/contracts";
+import { CONTRACTS, ACTIVE_CHAIN_ID, IS_MAINNET } from "@/lib/contracts";
 import { propFirmFactoryABI, erc20ABI } from "@/lib/abis";
 
 interface Plan {
@@ -51,8 +51,8 @@ const plans: Plan[] = [
         id: "professional",
         contractPlanId: 2,
         name: "Professional",
-        price: "$159.99",
-        priceUSDC: BigInt(159990000),
+        price: "$99.99",
+        priceUSDC: BigInt(99990000),
         description: "The standard for serious traders.",
         icon: Trophy,
         recommended: true,
@@ -70,8 +70,8 @@ const plans: Plan[] = [
         id: "executive",
         contractPlanId: 3,
         name: "Executive",
-        price: "$299.99",
-        priceUSDC: BigInt(299990000),
+        price: "$149.99",
+        priceUSDC: BigInt(149990000),
         description: "Maximum capital for maximum returns.",
         icon: Crown,
         color: "from-purple-500/20 to-purple-600/5",
@@ -301,8 +301,8 @@ export function PlanSelectionModal({ isOpen, onSelectPlan, onClose, isForced = f
                                                     >
                                                         <TransactionButton
                                                             className={`w-full py-4 text-base font-semibold rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-transform ${isRecommended
-                                                                    ? "bg-[var(--color-gold)] text-black shadow-lg shadow-[var(--color-gold)]/20"
-                                                                    : "bg-white text-black hover:bg-zinc-200"
+                                                                ? "bg-[var(--color-gold)] text-black shadow-lg shadow-[var(--color-gold)]/20"
+                                                                : "bg-white text-black hover:bg-zinc-200"
                                                                 }`}
                                                             text={`Select ${plan.name}`}
                                                         />
@@ -315,8 +315,8 @@ export function PlanSelectionModal({ isOpen, onSelectPlan, onClose, isForced = f
                                                     <Button
                                                         onClick={() => handleOffchainSelect(plan)}
                                                         className={`w-full py-6 text-base font-semibold rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-transform ${isRecommended
-                                                                ? "bg-[var(--color-gold)] text-black shadow-lg shadow-[var(--color-gold)]/20"
-                                                                : "bg-white text-black hover:bg-zinc-200"
+                                                            ? "bg-[var(--color-gold)] text-black shadow-lg shadow-[var(--color-gold)]/20"
+                                                            : "bg-white text-black hover:bg-zinc-200"
                                                             }`}
                                                     >
                                                         Get Started <ArrowRight className="w-5 h-5" />
@@ -351,7 +351,7 @@ export function PlanSelectionModal({ isOpen, onSelectPlan, onClose, isForced = f
                                             </p>
                                             {txHash && (
                                                 <a
-                                                    href={`https://sepolia.basescan.org/tx/${txHash}`}
+                                                    href={`https://${IS_MAINNET ? '' : 'sepolia.'}basescan.org/tx/${txHash}`}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 font-medium bg-blue-500/10 px-4 py-2 rounded-full transition-colors"
