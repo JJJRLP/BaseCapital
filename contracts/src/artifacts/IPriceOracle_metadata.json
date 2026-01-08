@@ -1,0 +1,153 @@
+{
+	"compiler": {
+		"version": "0.8.30+commit.73712a01"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "token",
+						"type": "address"
+					}
+				],
+				"name": "getPrice",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "price",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "timestamp",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "token",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "getValueInUSD",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "valueUsd",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "token",
+						"type": "address"
+					}
+				],
+				"name": "hasPriceFeed",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"details": "Supports Chainlink, Pyth, or custom price feeds",
+			"kind": "dev",
+			"methods": {
+				"getPrice(address)": {
+					"params": {
+						"token": "Address of the token"
+					},
+					"returns": {
+						"price": "Price in USD with 8 decimals",
+						"timestamp": "Last update timestamp"
+					}
+				},
+				"getValueInUSD(address,uint256)": {
+					"params": {
+						"amount": "Amount of tokens (in token decimals)",
+						"token": "Address of the token"
+					},
+					"returns": {
+						"valueUsd": "Value in USD with 6 decimals (USDC standard)"
+					}
+				},
+				"hasPriceFeed(address)": {
+					"params": {
+						"token": "Address of the token"
+					},
+					"returns": {
+						"_0": "True if price feed exists"
+					}
+				}
+			},
+			"title": "IPriceOracle",
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {
+				"getPrice(address)": {
+					"notice": "Get the latest price for a token in USD"
+				},
+				"getValueInUSD(address,uint256)": {
+					"notice": "Get the value of token amount in USD"
+				},
+				"hasPriceFeed(address)": {
+					"notice": "Check if price feed is available for a token"
+				}
+			},
+			"notice": "Interface for price oracle integration",
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"interfaces/IPriceOracle.sol": "IPriceOracle"
+		},
+		"evmVersion": "prague",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"interfaces/IPriceOracle.sol": {
+			"keccak256": "0x68b0330d69e0697a6940acf63892639f32c6c6de7189a8d048d00c6985793aba",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://e0783201f5d0c3a2e1bcafc9033c6d9fa03f656556a13e802d56fe761d4a2bde",
+				"dweb:/ipfs/QmWimoJmTFNvzP8Vayye9QU4j2p7LQpngYGSH1RRSun4L8"
+			]
+		}
+	},
+	"version": 1
+}

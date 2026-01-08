@@ -1,0 +1,386 @@
+{
+	"compiler": {
+		"version": "0.8.30+commit.73712a01"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_usdc",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "NoPriceFeed",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "NotOwner",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "StalePrice",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "ZeroAddress",
+				"type": "error"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "token",
+						"type": "address"
+					}
+				],
+				"name": "PriceFeedRemoved",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "token",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "feed",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint8",
+						"name": "tokenDecimals",
+						"type": "uint8"
+					}
+				],
+				"name": "PriceFeedSet",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "newThreshold",
+						"type": "uint256"
+					}
+				],
+				"name": "StalenessThresholdUpdated",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "token",
+						"type": "address"
+					}
+				],
+				"name": "getPrice",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "price",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "timestamp",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "token",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "getValueInUSD",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "valueUsd",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "token",
+						"type": "address"
+					}
+				],
+				"name": "hasPriceFeed",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "priceFeeds",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "feedAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint8",
+						"name": "feedDecimals",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint8",
+						"name": "tokenDecimals",
+						"type": "uint8"
+					},
+					{
+						"internalType": "bool",
+						"name": "isActive",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "token",
+						"type": "address"
+					}
+				],
+				"name": "removePriceFeed",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "token",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "feed",
+						"type": "address"
+					},
+					{
+						"internalType": "uint8",
+						"name": "tokenDecimals",
+						"type": "uint8"
+					}
+				],
+				"name": "setPriceFeed",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_threshold",
+						"type": "uint256"
+					}
+				],
+				"name": "setStalenessThreshold",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "stalenessThreshold",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "usdc",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"details": "Aggregates Chainlink feeds for multi-asset valuation",
+			"kind": "dev",
+			"methods": {
+				"constructor": {
+					"params": {
+						"_usdc": "USDC token address"
+					}
+				},
+				"getPrice(address)": {
+					"params": {
+						"token": "Address of the token"
+					},
+					"returns": {
+						"price": "Price in USD with 8 decimals",
+						"timestamp": "Last update timestamp"
+					}
+				},
+				"getValueInUSD(address,uint256)": {
+					"params": {
+						"amount": "Amount of tokens (in token decimals)",
+						"token": "Address of the token"
+					},
+					"returns": {
+						"valueUsd": "Value in USD with 6 decimals (USDC standard)"
+					}
+				},
+				"hasPriceFeed(address)": {
+					"params": {
+						"token": "Address of the token"
+					},
+					"returns": {
+						"_0": "True if price feed exists"
+					}
+				},
+				"setPriceFeed(address,address,uint8)": {
+					"params": {
+						"feed": "Chainlink Aggregator address",
+						"token": "Token address",
+						"tokenDecimals": "Decimals of the token"
+					}
+				}
+			},
+			"title": "ChainlinkPriceOracle",
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {
+				"getPrice(address)": {
+					"notice": "Get the latest price for a token in USD"
+				},
+				"getValueInUSD(address,uint256)": {
+					"notice": "Get the value of token amount in USD"
+				},
+				"hasPriceFeed(address)": {
+					"notice": "Check if price feed is available for a token"
+				},
+				"removePriceFeed(address)": {
+					"notice": "Remove price feed for a token"
+				},
+				"setPriceFeed(address,address,uint8)": {
+					"notice": "Set price feed for a token"
+				},
+				"setStalenessThreshold(uint256)": {
+					"notice": "Update staleness threshold"
+				}
+			},
+			"notice": "Price oracle implementation using Chainlink price feeds",
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"ChainlinkPriceOracle.sol": "ChainlinkPriceOracle"
+		},
+		"evmVersion": "prague",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"ChainlinkPriceOracle.sol": {
+			"keccak256": "0x931c8210db6196bc5de440ed05693e4e7981e88f9e5868e51ff8b18f6fa13f29",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://586eb7309a15379770258085ac8b4461832dff736d0144137aa87dee096ce998",
+				"dweb:/ipfs/QmTMJBe5SQQ1bjkzi93PwECzTyvWPYR9W2xMb69s6uzit1"
+			]
+		},
+		"interfaces/IPriceOracle.sol": {
+			"keccak256": "0x68b0330d69e0697a6940acf63892639f32c6c6de7189a8d048d00c6985793aba",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://e0783201f5d0c3a2e1bcafc9033c6d9fa03f656556a13e802d56fe761d4a2bde",
+				"dweb:/ipfs/QmWimoJmTFNvzP8Vayye9QU4j2p7LQpngYGSH1RRSun4L8"
+			]
+		}
+	},
+	"version": 1
+}

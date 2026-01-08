@@ -1,0 +1,888 @@
+{
+	"compiler": {
+		"version": "0.8.30+commit.73712a01"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "AlreadyRegistered",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "InvalidStage",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "NotFactory",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					}
+				],
+				"name": "OwnableInvalidOwner",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "OwnableUnauthorizedAccount",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "ReentrancyGuardReentrantCall",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "TraderNotActive",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "ZeroAddress",
+				"type": "error"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "newDailyEquity",
+						"type": "uint256"
+					}
+				],
+				"name": "DailyReset",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "previousOwner",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "OwnershipTransferred",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "enum RiskManager.Stage",
+						"name": "stage",
+						"type": "uint8"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "profitTarget",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "dailyLoss",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "totalLoss",
+						"type": "uint256"
+					}
+				],
+				"name": "RulesUpdated",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "reason",
+						"type": "string"
+					}
+				],
+				"name": "TraderLiquidated",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "trader",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "enum RiskManager.Stage",
+						"name": "stage",
+						"type": "uint8"
+					}
+				],
+				"name": "TraderRegistered",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "enum RiskManager.Status",
+						"name": "status",
+						"type": "uint8"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "equity",
+						"type": "uint256"
+					}
+				],
+				"name": "TraderStatusChecked",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "enum RiskManager.Stage",
+						"name": "from",
+						"type": "uint8"
+					},
+					{
+						"indexed": false,
+						"internalType": "enum RiskManager.Stage",
+						"name": "to",
+						"type": "uint8"
+					}
+				],
+				"name": "TraderUpgraded",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "activeTraders",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address[]",
+						"name": "accounts",
+						"type": "address[]"
+					}
+				],
+				"name": "batchCheckStatus",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "checkStatus",
+				"outputs": [
+					{
+						"internalType": "enum RiskManager.Status",
+						"name": "status",
+						"type": "uint8"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes",
+						"name": "",
+						"type": "bytes"
+					}
+				],
+				"name": "checkUpkeep",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "upkeepNeeded",
+						"type": "bool"
+					},
+					{
+						"internalType": "bytes",
+						"name": "performData",
+						"type": "bytes"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "factory",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getActiveTraderCount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getActiveTraders",
+				"outputs": [
+					{
+						"internalType": "address[]",
+						"name": "",
+						"type": "address[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "getTraderState",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "accountContract",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "initialBalance",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "dailyStartingEquity",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "lastDayReset",
+								"type": "uint256"
+							},
+							{
+								"internalType": "enum RiskManager.Stage",
+								"name": "stage",
+								"type": "uint8"
+							},
+							{
+								"internalType": "uint8",
+								"name": "tradingDays",
+								"type": "uint8"
+							},
+							{
+								"internalType": "bool",
+								"name": "isActive",
+								"type": "bool"
+							}
+						],
+						"internalType": "struct RiskManager.TraderState",
+						"name": "",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes",
+						"name": "performData",
+						"type": "bytes"
+					}
+				],
+				"name": "performUpkeep",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "initialBalance",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum RiskManager.Stage",
+						"name": "stage",
+						"type": "uint8"
+					}
+				],
+				"name": "registerTrader",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "renounceOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_factory",
+						"type": "address"
+					}
+				],
+				"name": "setFactory",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "enum RiskManager.Stage",
+						"name": "",
+						"type": "uint8"
+					}
+				],
+				"name": "stageRules",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "profitTargetBps",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "maxDailyLossBps",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "maxTotalLossBps",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint8",
+						"name": "minTradingDays",
+						"type": "uint8"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "traderIndex",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "traderStates",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "accountContract",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "initialBalance",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "dailyStartingEquity",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "lastDayReset",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum RiskManager.Stage",
+						"name": "stage",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint8",
+						"name": "tradingDays",
+						"type": "uint8"
+					},
+					{
+						"internalType": "bool",
+						"name": "isActive",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "transferOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "enum RiskManager.Stage",
+						"name": "stage",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint256",
+						"name": "profitTargetBps",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "maxDailyLossBps",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "maxTotalLossBps",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint8",
+						"name": "minTradingDays",
+						"type": "uint8"
+					}
+				],
+				"name": "updateRules",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "upgradeTrader",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "wouldFail",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					},
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "wouldPass",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"details": "Implements Chainlink Automation compatible interface for keeper integration",
+			"errors": {
+				"OwnableInvalidOwner(address)": [
+					{
+						"details": "The owner is not a valid owner account. (eg. `address(0)`)"
+					}
+				],
+				"OwnableUnauthorizedAccount(address)": [
+					{
+						"details": "The caller account is not authorized to perform an operation."
+					}
+				],
+				"ReentrancyGuardReentrantCall()": [
+					{
+						"details": "Unauthorized reentrant call."
+					}
+				]
+			},
+			"kind": "dev",
+			"methods": {
+				"checkStatus(address)": {
+					"params": {
+						"account": "TraderAccount address to check"
+					},
+					"returns": {
+						"status": "Current status after check"
+					}
+				},
+				"checkUpkeep(bytes)": {
+					"details": "Returns true if any trader needs a status check"
+				},
+				"owner()": {
+					"details": "Returns the address of the current owner."
+				},
+				"performUpkeep(bytes)": {
+					"details": "Called by Chainlink to check trader statuses"
+				},
+				"registerTrader(address,uint256,uint8)": {
+					"params": {
+						"account": "TraderAccount contract address",
+						"initialBalance": "Starting capital",
+						"stage": "Initial stage (usually Challenge)"
+					}
+				},
+				"renounceOwnership()": {
+					"details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner."
+				},
+				"transferOwnership(address)": {
+					"details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+				}
+			},
+			"title": "RiskManager",
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {
+				"batchCheckStatus(address[])": {
+					"notice": "Batch check multiple traders"
+				},
+				"checkStatus(address)": {
+					"notice": "Check status of a trader account and enforce rules"
+				},
+				"checkUpkeep(bytes)": {
+					"notice": "Chainlink Automation: Check if upkeep is needed"
+				},
+				"getActiveTraderCount()": {
+					"notice": "Get number of active traders"
+				},
+				"getActiveTraders()": {
+					"notice": "Get all active trader accounts"
+				},
+				"getTraderState(address)": {
+					"notice": "Get trader state"
+				},
+				"performUpkeep(bytes)": {
+					"notice": "Chainlink Automation: Perform upkeep"
+				},
+				"registerTrader(address,uint256,uint8)": {
+					"notice": "Register a new trader account for monitoring"
+				},
+				"setFactory(address)": {
+					"notice": "Set the factory address"
+				},
+				"updateRules(uint8,uint256,uint256,uint256,uint8)": {
+					"notice": "Update rules for a stage"
+				},
+				"upgradeTrader(address)": {
+					"notice": "Upgrade trader to next stage"
+				},
+				"wouldFail(address)": {
+					"notice": "Check if trader would fail with current equity"
+				},
+				"wouldPass(address)": {
+					"notice": "Check if trader would pass with current equity"
+				}
+			},
+			"notice": "Monitors trader accounts and enforces PropFirm rules on-chain",
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"RiskManager.sol": "RiskManager"
+		},
+		"evmVersion": "prague",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@openzeppelin/contracts/access/Ownable.sol": {
+			"keccak256": "0xff6d0bb2e285473e5311d9d3caacb525ae3538a80758c10649a4d61029b017bb",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://8ed324d3920bb545059d66ab97d43e43ee85fd3bd52e03e401f020afb0b120f6",
+				"dweb:/ipfs/QmfEckWLmZkDDcoWrkEvMWhms66xwTLff9DDhegYpvHo1a"
+			]
+		},
+		"@openzeppelin/contracts/interfaces/IERC1363.sol": {
+			"keccak256": "0xd5ea07362ab630a6a3dee4285a74cf2377044ca2e4be472755ad64d7c5d4b69d",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://da5e832b40fc5c3145d3781e2e5fa60ac2052c9d08af7e300dc8ab80c4343100",
+				"dweb:/ipfs/QmTzf7N5ZUdh5raqtzbM11yexiUoLC9z3Ws632MCuycq1d"
+			]
+		},
+		"@openzeppelin/contracts/interfaces/IERC165.sol": {
+			"keccak256": "0x0afcb7e740d1537b252cb2676f600465ce6938398569f09ba1b9ca240dde2dfc",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://1c299900ac4ec268d4570ecef0d697a3013cd11a6eb74e295ee3fbc945056037",
+				"dweb:/ipfs/Qmab9owJoxcA7vJT5XNayCMaUR1qxqj1NDzzisduwaJMcZ"
+			]
+		},
+		"@openzeppelin/contracts/interfaces/IERC20.sol": {
+			"keccak256": "0x1a6221315ce0307746c2c4827c125d821ee796c74a676787762f4778671d4f44",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://1bb2332a7ee26dd0b0de9b7fe266749f54820c99ab6a3bcb6f7e6b751d47ee2d",
+				"dweb:/ipfs/QmcRWpaBeCYkhy68PR3B4AgD7asuQk7PwkWxrvJbZcikLF"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+			"keccak256": "0x74ed01eb66b923d0d0cfe3be84604ac04b76482a55f9dd655e1ef4d367f95bc2",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://5282825a626cfe924e504274b864a652b0023591fa66f06a067b25b51ba9b303",
+				"dweb:/ipfs/QmeCfPykghhMc81VJTrHTC7sF6CRvaA1FXVq2pJhwYp1dV"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol": {
+			"keccak256": "0x982c5cb790ab941d1e04f807120a71709d4c313ba0bfc16006447ffbd27fbbd5",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://8150ceb4ac947e8a442b2a9c017e01e880b2be2dd958f1fa9bc405f4c5a86508",
+				"dweb:/ipfs/QmbcBmFX66AY6Kbhnd5gx7zpkgqnUafo43XnmayAM7zVdB"
+			]
+		},
+		"@openzeppelin/contracts/utils/Context.sol": {
+			"keccak256": "0x493033a8d1b176a037b2cc6a04dad01a5c157722049bbecf632ca876224dd4b2",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://6a708e8a5bdb1011c2c381c9a5cfd8a9a956d7d0a9dc1bd8bcdaf52f76ef2f12",
+				"dweb:/ipfs/Qmax9WHBnVsZP46ZxEMNRQpLQnrdE4dK8LehML1Py8FowF"
+			]
+		},
+		"@openzeppelin/contracts/utils/ReentrancyGuard.sol": {
+			"keccak256": "0x11a5a79827df29e915a12740caf62fe21ebe27c08c9ae3e09abe9ee3ba3866d3",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://3cf0c69ab827e3251db9ee6a50647d62c90ba580a4d7bbff21f2bea39e7b2f4a",
+				"dweb:/ipfs/QmZiKwtKU1SBX4RGfQtY7PZfiapbbu6SZ9vizGQD9UHjRA"
+			]
+		},
+		"@openzeppelin/contracts/utils/introspection/IERC165.sol": {
+			"keccak256": "0x8891738ffe910f0cf2da09566928589bf5d63f4524dd734fd9cedbac3274dd5c",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://971f954442df5c2ef5b5ebf1eb245d7105d9fbacc7386ee5c796df1d45b21617",
+				"dweb:/ipfs/QmadRjHbkicwqwwh61raUEapaVEtaLMcYbQZWs9gUkgj3u"
+			]
+		},
+		"RiskManager.sol": {
+			"keccak256": "0x67bdf46c5406bcf231cca3af021dd8fb8224df82c6e7f6d39bf8f60146ebf5d6",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://6aa6854b5a32b099fded5d9e4705edd284244fa2f6e44145e529e544ccc1aa8c",
+				"dweb:/ipfs/QmaaRjrDKLg46ELYBbo1qURPAbumZTdcRkwf4aSzJLfMUW"
+			]
+		},
+		"TraderAccount.sol": {
+			"keccak256": "0xe2df0de5144c17314cd327d7bc4ce24e28e16d614a5e89ae77a3066ea00e08c2",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://78eb2da839d19392516388746a174f7d813269f98c24d1a5afbffa3ecd530ec9",
+				"dweb:/ipfs/QmVTzTZYesYT9CjD7p48u7Lq1jwtVg4NMZEWz41d5KMPqg"
+			]
+		},
+		"interfaces/IPriceOracle.sol": {
+			"keccak256": "0x68b0330d69e0697a6940acf63892639f32c6c6de7189a8d048d00c6985793aba",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://e0783201f5d0c3a2e1bcafc9033c6d9fa03f656556a13e802d56fe761d4a2bde",
+				"dweb:/ipfs/QmWimoJmTFNvzP8Vayye9QU4j2p7LQpngYGSH1RRSun4L8"
+			]
+		}
+	},
+	"version": 1
+}
