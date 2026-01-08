@@ -12,6 +12,7 @@ Solidity smart contracts for the Base Capital on-chain PropFirm. Built with Foun
 | **RiskManager.sol** | On-chain rule enforcement - drawdown limits, profit targets, auto-liquidation |
 | **Treasury.sol** | USDC capital pool, account seeding, profit splits (80/20) |
 | **CertificateNFT.sol** | ERC-721 certificates minted when traders pass stages |
+| **ChainlinkPriceOracle.sol** | Multi-asset valuation using Chainlink price feeds |
 
 ## Architecture
 

@@ -41,3 +41,9 @@ yarn-error.log*
 next-env.d.ts
 
 /src/generated/prisma
+
+# Foundry
+/contracts/cache/
+/contracts/out/
+/contracts/foundry.lock
+*.ps1

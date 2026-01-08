@@ -4,6 +4,7 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "./interfaces/IPriceOracle.sol";
 
 /**
  * @title TraderAccount
@@ -31,6 +32,12 @@ contract TraderAccount is ReentrancyGuard {
     
     // Whitelisted tokens (can hold/trade these)
     mapping(address => bool) public whitelistedTokens;
+    
+    // Track held tokens for equity calculation
+    address[] public heldTokens;
+    
+    // Price oracle for multi-asset valuation
+    IPriceOracle public priceOracle;
 
     // ============ Events ============
 
@@ -40,6 +47,7 @@ contract TraderAccount is ReentrancyGuard {
     event ProfitWithdrawn(address indexed trader, uint256 amount);
     event TokenWhitelisted(address indexed token, bool status);
     event RouterWhitelisted(address indexed router, bool status);
+    event PriceOracleUpdated(address indexed oracle);
 
     // ============ Errors ============
 
@@ -136,7 +144,32 @@ contract TraderAccount is ReentrancyGuard {
      */
     function setTokenWhitelist(address _token, bool _status) external onlyFactory {
         whitelistedTokens[_token] = _status;
+        
+        // Track non-USDC tokens for equity calculation
+        if (_status && _token != address(usdc)) {
+            // Add to heldTokens if not already present
+            bool found = false;
+            for (uint256 i = 0; i < heldTokens.length; i++) {
+                if (heldTokens[i] == _token) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                heldTokens.push(_token);
+            }
+        }
+        
         emit TokenWhitelisted(_token, _status);
+    }
+
+    /**
+     * @notice Set the price oracle for multi-asset valuation
+     * @param _oracle IPriceOracle contract address
+     */
+    function setPriceOracle(address _oracle) external onlyFactory {
+        priceOracle = IPriceOracle(_oracle);
+        emit PriceOracleUpdated(_oracle);
     }
 
     // ============ Trader Functions ============
@@ -227,13 +260,32 @@ contract TraderAccount is ReentrancyGuard {
 
     /**
      * @notice Get current equity (total value of all holdings in USDC terms)
-     * @dev For simplicity, this returns USDC balance only
-     *      In production, integrate with an oracle for accurate valuations
+     * @dev Uses price oracle for multi-asset valuation if available
      */
     function getEquity() public view returns (uint256) {
-        // For now, just return USDC balance
-        // TODO: Integrate price oracle for other token values
-        return usdc.balanceOf(address(this));
+        // Start with USDC balance
+        uint256 totalValue = usdc.balanceOf(address(this));
+        
+        // If no price oracle, return USDC only
+        if (address(priceOracle) == address(0)) {
+            return totalValue;
+        }
+        
+        // Add value of other held tokens
+        for (uint256 i = 0; i < heldTokens.length; i++) {
+            address token = heldTokens[i];
+            uint256 balance = IERC20(token).balanceOf(address(this));
+            
+            if (balance > 0 && priceOracle.hasPriceFeed(token)) {
+                try priceOracle.getValueInUSD(token, balance) returns (uint256 value) {
+                    totalValue += value;
+                } catch {
+                    // If oracle fails, skip this token (conservative approach)
+                }
+            }
+        }
+        
+        return totalValue;
     }
 
     /**
